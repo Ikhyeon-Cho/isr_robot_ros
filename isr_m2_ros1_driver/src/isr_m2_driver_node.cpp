@@ -4,13 +4,14 @@ int main(int argc, char* argv[])
 {
 	ros::init(argc, argv, "isr2_m2_driver_node");
 
-    std::shared_ptr<ros::NodeHandle> nh = std::make_shared<ros::NodeHandle>();
+    ros::NodeHandle nh;
 
     std::shared_ptr<isr_m2_driver::ISR_M2> isr_m2 = isr_m2_driver::ISR_M2::create(nh);
+    
     std::string port;
     int baudrate;
-    if (!nh->getParam("port", port)) nh->param<std::string>("port", port, "/dev/ttyACM0");
-    if (!nh->getParam("baudrate", baudrate)) nh->param<int>("baudrate", baudrate, 115200);
+    if (!nh.getParam("port", port)) nh.param<std::string>("port", port, "/dev/ttyACM0");
+    if (!nh.getParam("baudrate", baudrate)) nh.param<int>("baudrate", baudrate, 115200);
     
     if (!isr_m2->ConnectRobot(port, baudrate)) return 1;
 

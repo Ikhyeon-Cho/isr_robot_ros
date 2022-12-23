@@ -57,11 +57,7 @@ add_message_files(
 ## Generate services in the 'srv' folder
 add_service_files(
   FILES
-  RobotStatus.srv
   RobotCommand.srv
-  EncoderValue.srv
-  WheelVelocity.srv
-  SetWheelVelocity.srv
 )
 
 ## Generate actions in the 'action' folder

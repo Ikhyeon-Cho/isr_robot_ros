@@ -33,10 +33,9 @@ public:
     const ISR_M2 & operator=(const ISR_M2 &) = delete;
     ISR_M2(const ISR_M2 &) = delete;
 
-    static std::shared_ptr<ISR_M2> create(std::shared_ptr<ros::NodeHandle>& nh)
+    static std::shared_ptr<ISR_M2> create(ros::NodeHandle& nh)
     {
-        auto isr_m2_shared_ptr = std::shared_ptr<ISR_M2>(new ISR_M2);
-		isr_m2_shared_ptr->nh_ = nh;
+        auto isr_m2_shared_ptr = std::shared_ptr<ISR_M2>(new ISR_M2(nh));
         isr_m2_shared_ptr->weak_self_ = isr_m2_shared_ptr;
         return isr_m2_shared_ptr;
     }
@@ -94,25 +93,25 @@ public:
 
 private:
     std::weak_ptr<ISR_M2> weak_self_;
-	std::shared_ptr<ros::NodeHandle> nh_;
-	ISR_M2()
-	: serial_(io)
+	ros::NodeHandle nh_;
+	ISR_M2(ros::NodeHandle& nh)
+	: nh_(nh), serial_(io)
 	{
 		// Initialize cmd_vel msg subscription
-		cmd_vel_sub_ = nh_->subscribe("cmd_vel", 10, &ISR_M2::cmd_vel_callback, this);
+		cmd_vel_sub_ = nh_.subscribe("cmd_vel", 10, &ISR_M2::cmd_vel_callback, this);
 		cmd_vel_msg_.linear.x;
 		cmd_vel_msg_.angular.z;
 		
 		// Initialize odometry msg publisher
-		odom_pub_ = nh_->advertise<nav_msgs::Odometry>("odom", 10);
+		odom_pub_ = nh_.advertise<nav_msgs::Odometry>("odom", 10);
 
 		// Initialize robot status msg publisher
-		robot_status_pub_ = nh_->advertise<isr_m2_ros1_driver::RobotStatusStamped>("robot_status", 10);
+		robot_status_pub_ = nh_.advertise<isr_m2_ros1_driver::RobotStatusStamped>("robot_status", 10);
 		robot_status_msg_.header.stamp = ros::Time::now();
 		robot_status_msg_old_.header.stamp = ros::Time::now();
 
 		// Initialize robot command service server
-		robot_cmd_srv_ = nh_->advertiseService("robot_cmd", &ISR_M2::robot_cmd_callback, this);
+		robot_cmd_srv_ = nh_.advertiseService("robot_cmd", &ISR_M2::robot_cmd_callback, this);
 
 		// Declare timer callback for main serial command io
 		auto timer_callback = [this](const ros::WallTimerEvent& event) -> void {
@@ -193,7 +192,7 @@ private:
 
 			serial_io_mut_.unlock();
 		};
-		timer_ = this->nh_->createWallTimer(ros::WallDuration(0.01), timer_callback);
+		timer_ = this->nh_.createWallTimer(ros::WallDuration(0.01), timer_callback);
 	}
 
 	void cmd_vel_callback(const geometry_msgs::Twist::ConstPtr msg)
