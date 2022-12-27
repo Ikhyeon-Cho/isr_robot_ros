@@ -50,6 +50,87 @@ bool ISR_M2::ConnectRobot(const std::string& port, const int baudrate)
 
 	if (!Initialize()) return false;
 
+	// Declare timer callback for main serial command io
+	auto timer_callback = [this](const ros::WallTimerEvent& event) -> void {
+		serial_io_mut_.lock();
+
+		// Set linear/angular velocity
+		SetVelocityVW(cmd_vel_msg_.linear.x, cmd_vel_msg_.angular.z);
+		// ROS_INFO_STREAM("timer cb: set velocity >> "
+		// 	<< "v: " << this->cmd_vel_msg_->linear.x
+		// 	<< " / w: " << this->cmd_vel_msg_->angular.z);
+
+		// Read encoder
+		ReadEncoder();
+		// ROS_INFO_STREAM("timer cb: read encoder >> "
+		// 	<< "l: " << this->left_encoder_
+		// 	<< " / r: " << this->right_encoder_);
+
+		// broadcast odometry transform
+		static tf2_ros::TransformBroadcaster odom_tf_broadcaster_;
+		geometry_msgs::Quaternion odom_quat = createQuaternionMsgFromYaw(position_.theta);
+		geometry_msgs::TransformStamped odom_tf;
+		odom_tf.header.stamp = this->cur_encoder_time_;
+		odom_tf.header.frame_id = "odom";
+		odom_tf.child_frame_id = "base_link";
+		odom_tf.transform.translation.x = position_.x;
+		odom_tf.transform.translation.y = position_.y;
+		odom_tf.transform.translation.z = 0.0;
+		odom_tf.transform.rotation = odom_quat;
+		odom_tf_broadcaster_.sendTransform(odom_tf);
+
+		// publish odometry message
+		nav_msgs::Odometry odom;
+		odom.header.stamp = this->cur_encoder_time_;
+		odom.header.frame_id = "odom";
+		odom.child_frame_id = "base_link";
+		odom.pose.pose.position.x = position_.x;
+		odom.pose.pose.position.y = position_.y;
+		odom.pose.pose.position.z = 0;
+		odom.pose.pose.orientation = odom_quat;
+		odom.pose.covariance.fill(0);
+		odom.twist.twist.linear.x = 0;
+		odom.twist.twist.linear.y = 0;
+		odom.twist.twist.linear.z = 0;
+		odom.twist.twist.angular.x = 0;
+		odom.twist.twist.angular.y = 0;
+		odom.twist.twist.angular.z = 0;
+		odom.twist.covariance.fill(0);
+		this->odom_pub_.publish(odom);
+		
+		// Read robot status
+		static bool robot_status_changed = false;
+		ReadRobotStatus(this->robot_status_msg_.motor_enabled, this->robot_status_msg_.motor_stopped, this->robot_status_msg_.estop_pressed);
+		// ROS_INFO_STREAM("timer cb: read status >> "
+		// 	<< "motor_enabled: "<< this->robot_status_msg_.motor_enabled
+		// 	<< " / motor_stopped: " << this->robot_status_msg_.motor_stopped
+		// 	<< " / estop_pressed: " << this->robot_status_msg_.estop_pressed);
+
+		if (this->robot_status_msg_old_.motor_enabled != this->robot_status_msg_.motor_enabled) {
+			ROS_INFO("Motor is %s", (this->robot_status_msg_.motor_enabled ? "ON" : "OFF"));
+			robot_status_changed = true;
+		}
+		if (this->robot_status_msg_old_.motor_stopped != this->robot_status_msg_.motor_stopped) {
+			ROS_INFO("Motor is %s", (this->robot_status_msg_.motor_stopped ? "Stopped" : "Resumed"));
+			robot_status_changed = true;
+		}
+		if (this->robot_status_msg_old_.estop_pressed != this->robot_status_msg_.estop_pressed) {
+			ROS_INFO("E-Stop button is %s", (this->robot_status_msg_.estop_pressed ? "Pressed" : "Released"));
+			robot_status_changed = true;
+		}
+
+		if (robot_status_changed)
+		{
+			this->robot_status_msg_.header.stamp = this->cur_encoder_time_;
+			this->robot_status_pub_.publish(this->robot_status_msg_old_);
+			this->robot_status_msg_old_ = this->robot_status_msg_;
+			robot_status_changed = false;
+		}
+
+		serial_io_mut_.unlock();
+	};
+	timer_ = this->nh_.createWallTimer(ros::WallDuration(0.01), timer_callback);
+
 	return true;
 }
 
