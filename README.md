@@ -1,4 +1,4 @@
-# isr_m2
+# isr_m3
 
 
 
@@ -15,14 +15,14 @@ Already a pro? Just edit this README.md and make it your own. Want to make it ea
 
 ```
 cd existing_repo
-git remote add origin https://gitlab.com/isr-ku/isr-ros1/isr_m2.git
+git remote add origin https://gitlab.com/isr-ku/isr-ros1/isr_m3.git
 git branch -M main
 git push -uf origin main
 ```
 
 ## Integrate with your tools
 
-- [ ] [Set up project integrations](https://gitlab.com/isr-ku/isr-ros1/isr_m2/-/settings/integrations)
+- [ ] [Set up project integrations](https://gitlab.com/isr-ku/isr-ros1/isr_m3/-/settings/integrations)
 
 ## Collaborate with your team
 

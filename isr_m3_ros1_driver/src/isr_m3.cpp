@@ -1,4 +1,4 @@
-#include "isr_m2.h"
+#include "isr_m3.h"
 
 // Command Definitions
 #define COMMAND_INITIALIZE		0
@@ -16,10 +16,10 @@
 #define COMMAND_STATUS			21
 #define COMMAND_STATUS_RE		22  // for return message
 
-namespace isr_m2_driver
+namespace isr_m3_driver
 {
 
-bool ISR_M2::ConnectRobot(const std::string& port, const int baudrate)
+bool isr_m3::ConnectRobot(const std::string& port, const int baudrate)
 {
 	try {
 		serial_.open(port);
@@ -134,12 +134,12 @@ bool ISR_M2::ConnectRobot(const std::string& port, const int baudrate)
 	return true;
 }
 
-void ISR_M2::DisconnectRobot(void)
+void isr_m3::DisconnectRobot(void)
 {
 	serial_.close();
 }
 
-bool ISR_M2::Initialize(void)
+bool isr_m3::Initialize(void)
 {
 	if (!SendData(COMMAND_INITIALIZE, 0, NULL)) return false;
 
@@ -152,14 +152,14 @@ bool ISR_M2::Initialize(void)
 	return true;
 }
 
-bool ISR_M2::EnableMotors(void)
+bool isr_m3::EnableMotors(void)
 {
 	uint8_t data[1] = { true };
 	if (!SendData(COMMAND_MOTOR_ENABLE, 1, data)) return false;
 
 	return true;
 }
-bool ISR_M2::DisableMotors(void)
+bool isr_m3::DisableMotors(void)
 {
 	uint8_t data[1] = { false };
 	if (!SendData(COMMAND_MOTOR_ENABLE, 1, data)) return false;
@@ -167,7 +167,7 @@ bool ISR_M2::DisableMotors(void)
 	return true;
 }
 
-bool ISR_M2::StopMotors(void)
+bool isr_m3::StopMotors(void)
 {
 	uint8_t data[1] = { true };
 	if (!SendData(COMMAND_MOTOR_STOP, 1, data)) return false;
@@ -175,7 +175,7 @@ bool ISR_M2::StopMotors(void)
 	return true;
 }
 
-bool ISR_M2::ResumeMotors(void)
+bool isr_m3::ResumeMotors(void)
 {
 	uint8_t data[1] = { false };
 	if (!SendData(COMMAND_MOTOR_STOP, 1, data)) return false;
@@ -183,7 +183,7 @@ bool ISR_M2::ResumeMotors(void)
 	return true;
 }
 
-bool ISR_M2::SetVelocity(double leftWheelVel_MPS, double rightWheelVel_MPS)// m/s, m/s
+bool isr_m3::SetVelocity(double leftWheelVel_MPS, double rightWheelVel_MPS)// m/s, m/s
 {
 	// �¿� ���� ������ ����� ������ ȸ���ӵ��� RPM ������ ����Ѵ�.
 	int leftMotorlVel_RPM = (int)(leftWheelVel_MPS * MPS2RPM * GEAR_RATIO);
@@ -217,7 +217,7 @@ bool ISR_M2::SetVelocity(double leftWheelVel_MPS, double rightWheelVel_MPS)// m/
 }
 
 
-bool ISR_M2::SetVelocityVW(double linearVel_MPS, double angularVel_RPS)// m/s, rad/s
+bool isr_m3::SetVelocityVW(double linearVel_MPS, double angularVel_RPS)// m/s, rad/s
 {
 	//left  = MPS2RPM*GEAR_RATIO / WHEEL_RADIUS_M * (linearVel_MPS - WHEEL_BASE_M/2. * angularVel_RPS)
 	//right = MPS2RPM*GEAR_RATIO / WHEEL_RADIUS_M * (linearVel_MPS + WHEEL_BASE_M/2. * angularVel_RPS)
@@ -254,7 +254,7 @@ bool ISR_M2::SetVelocityVW(double linearVel_MPS, double angularVel_RPS)// m/s, r
 	return true;
 }
 
-bool ISR_M2::ReadVelocity_ADCApprox(void)
+bool isr_m3::ReadVelocity_ADCApprox(void)
 {
 	if (!SendData(COMMAND_MOTOR_ACTUAL_SPEED_READ, 0, NULL)) return false;
 
@@ -299,7 +299,7 @@ bool ISR_M2::ReadVelocity_ADCApprox(void)
 	return true;
 }
 
-bool ISR_M2::ReadEncoder(void)
+bool isr_m3::ReadEncoder(void)
 {
 	if (!SendData(COMMAND_ENCODER_READ, 0, NULL)) return false;
 
@@ -347,7 +347,7 @@ bool ISR_M2::ReadEncoder(void)
 	return false;
 }
 
-bool ISR_M2::ResetRobotPos(void)
+bool isr_m3::ResetRobotPos(void)
 {
 	if (!SendData(COMMAND_ENCODER_RESET, 0, NULL)) return false;
 
@@ -357,7 +357,7 @@ bool ISR_M2::ResetRobotPos(void)
 	return true;
 }
 
-bool ISR_M2::ReadRobotStatus(uint8_t& motorEnableStatus, uint8_t& motorStopStatus, uint8_t& emergencyButtonPressed)
+bool isr_m3::ReadRobotStatus(uint8_t& motorEnableStatus, uint8_t& motorStopStatus, uint8_t& emergencyButtonPressed)
 {
 	if (!SendData(COMMAND_STATUS, 0, NULL)) return false;
 
@@ -381,7 +381,7 @@ bool ISR_M2::ReadRobotStatus(uint8_t& motorEnableStatus, uint8_t& motorStopStatu
 
 // Calculates forward kinematics to get robot's pose(x, y, theta) by changing amount of L/R wheel encoder.
 // This is called Dead-reckoning.
-void ISR_M2::DeadReckoning(long dl, long dr)
+void isr_m3::DeadReckoning(long dl, long dr)
 {
 	double r = 2.0 * M_PI*WHEEL_RADIUS_M / ENCODER_PPR / GEAR_RATIO;
 	double del_dist_left_m_ = r*dl;
@@ -407,7 +407,7 @@ void ISR_M2::DeadReckoning(long dl, long dr)
 	position_.theta += w;
 }
 
-bool ISR_M2::SendData(uint8_t command, uint8_t numparam, uint8_t* params)
+bool isr_m3::SendData(uint8_t command, uint8_t numparam, uint8_t* params)
 {
 	uint8_t CRC = numparam + 1;
 
@@ -435,7 +435,7 @@ bool ISR_M2::SendData(uint8_t command, uint8_t numparam, uint8_t* params)
 	if (sentdata_size == (size_t)0) return false;
 	return true;
 }
-std::vector<uint8_t> ISR_M2::ReceiveData(uint8_t& command)
+std::vector<uint8_t> isr_m3::ReceiveData(uint8_t& command)
 {
 	uint8_t start_count = 0;
 	bool got_data = false;
@@ -509,28 +509,28 @@ std::vector<uint8_t> ISR_M2::ReceiveData(uint8_t& command)
 	return std::vector<uint8_t>();	//  Return empty vector.
 }
 
-std::vector<uint8_t> ISR_M2::Word2Bytes(int16_t dat)
+std::vector<uint8_t> isr_m3::Word2Bytes(int16_t dat)
 {
 	std::vector<uint8_t> retBytes(2);
 	for (int i = 0; i < 2; i++)
 		retBytes[1 - i] = (dat >> (i * 8));
 	return retBytes;
 }
-std::vector<uint8_t> ISR_M2::Long2Bytes(int32_t dat)
+std::vector<uint8_t> isr_m3::Long2Bytes(int32_t dat)
 {
 	std::vector<uint8_t> retBytes(4);
 	for (int i = 0; i < 4; i++)
 		retBytes[3 - i] = (dat >> (i * 8));
 	return retBytes;
 }
-int16_t ISR_M2::Bytes2Word(uint8_t* data)
+int16_t isr_m3::Bytes2Word(uint8_t* data)
 {
 	int dat_1 = data[0] << 8;
 	int dat_2 = data[1];
 	int dat = dat_1 | dat_2;
 	return dat;
 }
-int32_t ISR_M2::Bytes2Long(uint8_t* data)
+int32_t isr_m3::Bytes2Long(uint8_t* data)
 {
 	int dat_1 = data[0] << 24;
 	int dat_2 = data[1] << 16;
@@ -540,4 +540,4 @@ int32_t ISR_M2::Bytes2Long(uint8_t* data)
 	return dat;
 }
 
-} // namespace isr_m2_driver
+} // namespace isr_m3_driver
