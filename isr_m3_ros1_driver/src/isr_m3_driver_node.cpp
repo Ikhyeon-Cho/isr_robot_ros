@@ -6,7 +6,7 @@ int main(int argc, char* argv[])
 
     ros::NodeHandle nh;
 
-    std::shared_ptr<isr_m3_driver::isr_m3> isr_m3 = isr_m3_driver::isr_m3::create(nh);
+    std::shared_ptr<isr_m3_driver::ISR_M3> isr_m3 = isr_m3_driver::ISR_M3::create(nh);
     
     std::string port;
     int baudrate;

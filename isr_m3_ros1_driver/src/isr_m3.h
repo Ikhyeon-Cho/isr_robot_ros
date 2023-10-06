@@ -14,204 +14,221 @@
 #include <boost/asio.hpp>
 #include <boost/array.hpp>
 
-#define WHEEL_RADIUS_M 0.155	// Unit:m
-#define WHEEL_BASE_M 0.531 // Unit:m
-#define WHEEL_WIDTH_M 0.102 // Unit:m
-#define ENCODER_PPR 6400.0	// Unit: pulse/rev
-#define GEAR_RATIO 31.778	// Gearhead reduction ratio: 26 (26:1), Spurgear reduction ratio: 1.22 (44:36)
-#define MPS2RPM 61.608 // same as (60 /(2 * M_PI * WHEEL_RADIUS_M))
+#define WHEEL_RADIUS_M 0.155  // Unit:m
+#define WHEEL_BASE_M 0.531    // Unit:m
+#define WHEEL_WIDTH_M 0.102   // Unit:m
+#define ENCODER_PPR 6400.0    // Unit: pulse/rev
+#define GEAR_RATIO 31.778     // Gearhead reduction ratio: 26 (26:1), Spurgear reduction ratio: 1.22 (44:36)
+#define MPS2RPM 61.608        // same as (60 /(2 * M_PI * WHEEL_RADIUS_M))
 #define MAX_RPM 4650.0
 
 using namespace std::chrono_literals;
 
 namespace isr_m3_driver
 {
-
-class isr_m3
+class ISR_M3
 {
 public:
-    const isr_m3 & operator=(const isr_m3 &) = delete;
-    isr_m3(const isr_m3 &) = delete;
+  const ISR_M3& operator=(const ISR_M3&) = delete;
+  ISR_M3(const ISR_M3&) = delete;
 
-    static std::shared_ptr<isr_m3> create(ros::NodeHandle& nh)
-    {
-        auto isr_m3_shared_ptr = std::shared_ptr<isr_m3>(new isr_m3(nh));
-        isr_m3_shared_ptr->weak_self_ = isr_m3_shared_ptr;
-        return isr_m3_shared_ptr;
-    }
+  static std::shared_ptr<ISR_M3> create(ros::NodeHandle& nh)
+  {
+    auto isr_m3_shared_ptr = std::shared_ptr<ISR_M3>(new ISR_M3(nh));
+    isr_m3_shared_ptr->weak_self_ = isr_m3_shared_ptr;
+    return isr_m3_shared_ptr;
+  }
 
-	auto createQuaternionMsgFromYaw(double yaw)
-	{
-		tf2::Quaternion q;
-		q.setRPY(0, 0, yaw);
-		return tf2::toMsg(q);
-	}
+  auto createQuaternionMsgFromYaw(double yaw)
+  {
+    tf2::Quaternion q;
+    q.setRPY(0, 0, yaw);
+    return tf2::toMsg(q);
+  }
 
-	bool ConnectRobot(const std::string& port, const int baudrate);
-	void DisconnectRobot(void);
+  bool ConnectRobot(const std::string& port, const int baudrate);
+  void DisconnectRobot(void);
 
-	bool Initialize(void);
+  bool Initialize(void);
 
-	bool EnableMotors(void);
-	bool DisableMotors(void);
-	bool StopMotors(void);
-	bool ResumeMotors(void);
+  bool EnableMotors(void);
+  bool DisableMotors(void);
+  bool StopMotors(void);
+  bool ResumeMotors(void);
 
-	bool SetVelocity(double leftWheelVel_MPS, double rightWheelVel_MPS);// m/s, m/s
-	bool SetVelocityVW(double linearVel_MPS, double angularVel_RPS);// m/s, rad/s
-	bool ReadVelocity_ADCApprox();
+  bool SetVelocity(double leftWheelVel_MPS, double rightWheelVel_MPS);  // m/s, m/s
+  bool SetVelocityVW(double linearVel_MPS, double angularVel_RPS);      // m/s, rad/s
+  bool ReadVelocity_ADCApprox();
 
-	bool ReadEncoder(void);
-	bool ResetRobotPos(void);
+  bool ReadEncoder(void);
+  bool ResetRobotPos(void);
 
-	bool ReadRobotStatus(uint8_t& motorEnableStatus, uint8_t& motorStopStatus, uint8_t& emergencyButtonPressed);
+  bool ReadRobotStatus(uint8_t& motorEnableStatus, uint8_t& motorStopStatus, uint8_t& emergencyButtonPressed);
 
 public:
-	ros::Time prev_encoder_time_; // ms
-	ros::Time cur_encoder_time_; // ms
+  ros::Time prev_encoder_time_;  // ms
+  ros::Time cur_encoder_time_;   // ms
 
-	long left_encoder_;	// A encoder value of left wheel (Unit: pulse)
-	long right_encoder_;	// A encoder value of right wheel (Unit: pulse)
+  long left_encoder_;   // A encoder value of left wheel (Unit: pulse)
+  long right_encoder_;  // A encoder value of right wheel (Unit: pulse)
 
-	double del_dist_left_m_; // left_encoder_ - prev_leftEncoder
-	double del_dist_right_m_; // right_encoder_ - prev_rightEncoder
+  bool left_wheel_direction_reading_;
+  bool right_wheel_direction_reading_;
+  double left_wheel_vel_reading_mps_;
+  double right_wheel_vel_reading_mps_;
 
-	double left_wheel_vel_endoer_mps_;
-	double right_wheel_vel_encoder_mps_;
+  struct Position
+  {
+    double x;
+    double y;
+    double theta;
+  } position_;  // Robot pose calculated by dead-reckoning (Unit: m, m, rad)
 
-	bool left_wheel_direction_reading_;
-	bool right_wheel_direction_reading_;
-	double left_wheel_vel_reading_mps_;
-	double right_wheel_vel_reading_mps_;
-
-	struct Position
-	{
-		double x;
-		double y;
-		double theta;
-	} position_; // Robot pose calculated by dead-reckoning (Unit: m, m, rad)
+  struct Velocity
+  {
+    double v;
+    double w;
+  } velocity_;  // Robot velocity calculated by dead-reckoning (Unit: m, m, rad)
 
 private:
-    std::weak_ptr<isr_m3> weak_self_;
-	ros::NodeHandle nh_;
-	isr_m3(ros::NodeHandle& nh)
-	: nh_(nh), serial_(io)
-	{
-		// Initialize cmd_vel msg subscription
-		cmd_vel_sub_ = nh_.subscribe("cmd_vel", 10, &isr_m3::cmd_vel_callback, this);
-		cmd_vel_msg_.linear.x;
-		cmd_vel_msg_.angular.z;
-		
-		// Initialize odometry msg publisher
-		odom_pub_ = nh_.advertise<nav_msgs::Odometry>("odom", 10);
+  std::weak_ptr<ISR_M3> weak_self_;
+  ros::NodeHandle nh_;
+  ISR_M3(ros::NodeHandle& nh) : nh_(nh), serial_(io)
+  {
+    // Initialize cmd_vel msg subscription
+    cmd_vel_sub_ = nh_.subscribe("cmd_vel", 10, &ISR_M3::cmd_vel_callback, this);
+    cmd_vel_msg_.linear.x;
+    cmd_vel_msg_.angular.z;
 
-		// Initialize robot status msg publisher
-		robot_status_pub_ = nh_.advertise<isr_m3_ros1_driver::RobotStatusStamped>("robot_status", 10);
-		robot_status_msg_.header.stamp = ros::Time::now();
-		robot_status_msg_old_.header.stamp = ros::Time::now();
+    // Initialize odometry msg publisher
+    odom_pub_ = nh_.advertise<nav_msgs::Odometry>("odom", 10);
 
-		// Initialize robot command service server
-		robot_cmd_srv_ = nh_.advertiseService("robot_cmd", &isr_m3::robot_cmd_callback, this);
-	}
+    // Initialize robot status msg publisher
+    robot_status_pub_ = nh_.advertise<isr_m3_ros1_driver::RobotStatusStamped>("robot_status", 10);
+    robot_status_msg_.header.stamp = ros::Time::now();
+    robot_status_msg_old_.header.stamp = ros::Time::now();
 
-	void cmd_vel_callback(const geometry_msgs::Twist::ConstPtr msg)
-	{
-		cmd_vel_msg_ = *msg;
-		ROS_INFO_STREAM("Received cmd_vel << "
-			<< "v: " << this->cmd_vel_msg_.linear.x
-			<< " / w: " << this->cmd_vel_msg_.angular.z);
-	}
+    // Initialize robot command service server
+    robot_cmd_srv_ = nh_.advertiseService("robot_cmd", &ISR_M3::robot_cmd_callback, this);
+  }
 
-	bool robot_cmd_callback(isr_m3_ros1_driver::RobotCommand::Request& request,
-							isr_m3_ros1_driver::RobotCommand::Response& response)
-	{
-		while (ros::ok()) {
-			if (this->serial_io_mut_.try_lock()) {
-				response.result = isr_m3_ros1_driver::RobotCommand::Response::RESULT_FAIL;
-				switch(request.command) {
-					case isr_m3_ros1_driver::RobotCommand::Request::COMMAND_INITIALIZE:
-						ROS_INFO("Initialize motor");
-						if (Initialize()) response.result = isr_m3_ros1_driver::RobotCommand::Response::RESULT_SUCCESS;
-						else ROS_ERROR("Initialize motor failed");
-						break;
-					case isr_m3_ros1_driver::RobotCommand::Request::COMMAND_ENABLE_MOTOR:
-						if (request.val == 0) {
-							ROS_INFO("Enable motor");
-							if (EnableMotors()) response.result = isr_m3_ros1_driver::RobotCommand::Response::RESULT_SUCCESS;
-							else ROS_ERROR("Enable motor failed");
-						} else {
-							ROS_INFO("Disable motor");
-							if (DisableMotors()) response.result = isr_m3_ros1_driver::RobotCommand::Response::RESULT_SUCCESS;
-							else ROS_ERROR("Disable motor failed");
-						}
-						break;
-					case isr_m3_ros1_driver::RobotCommand::Request::COMMAND_STOP_MOTOR:
-						if (request.val == 0) {
-							ROS_INFO("Stop motor");
-							if (StopMotors()) response.result = isr_m3_ros1_driver::RobotCommand::Response::RESULT_SUCCESS;
-							else ROS_ERROR("Stop motor failed");
-						} else {
-							ROS_INFO("Resume motor");
-							if (ResumeMotors()) response.result = isr_m3_ros1_driver::RobotCommand::Response::RESULT_SUCCESS;
-							else ROS_ERROR("Resume motor failed");
-						}
-						break;
-					default:
-						break;
-				}
+  void cmd_vel_callback(const geometry_msgs::Twist::ConstPtr msg)
+  {
+    cmd_vel_msg_ = *msg;
+    ROS_INFO_STREAM("Received cmd_vel << "
+                    << "v: " << this->cmd_vel_msg_.linear.x << " / w: " << this->cmd_vel_msg_.angular.z);
+  }
 
-				// ROS_INFO("received request.command: %d", request.command);
-				// ROS_INFO("received request.val: %d", request.val);
-				// ROS_INFO("sent response.result: %d", response.result);
+  bool robot_cmd_callback(isr_m3_ros1_driver::RobotCommand::Request& request,
+                          isr_m3_ros1_driver::RobotCommand::Response& response)
+  {
+    while (ros::ok())
+    {
+      if (this->serial_io_mut_.try_lock())
+      {
+        response.result = isr_m3_ros1_driver::RobotCommand::Response::RESULT_FAIL;
+        switch (request.command)
+        {
+          case isr_m3_ros1_driver::RobotCommand::Request::COMMAND_INITIALIZE:
+            ROS_INFO("Initialize motor");
+            if (Initialize())
+              response.result = isr_m3_ros1_driver::RobotCommand::Response::RESULT_SUCCESS;
+            else
+              ROS_ERROR("Initialize motor failed");
+            break;
+          case isr_m3_ros1_driver::RobotCommand::Request::COMMAND_ENABLE_MOTOR:
+            if (request.val == 0)
+            {
+              ROS_INFO("Enable motor");
+              if (EnableMotors())
+                response.result = isr_m3_ros1_driver::RobotCommand::Response::RESULT_SUCCESS;
+              else
+                ROS_ERROR("Enable motor failed");
+            }
+            else
+            {
+              ROS_INFO("Disable motor");
+              if (DisableMotors())
+                response.result = isr_m3_ros1_driver::RobotCommand::Response::RESULT_SUCCESS;
+              else
+                ROS_ERROR("Disable motor failed");
+            }
+            break;
+          case isr_m3_ros1_driver::RobotCommand::Request::COMMAND_STOP_MOTOR:
+            if (request.val == 0)
+            {
+              ROS_INFO("Stop motor");
+              if (StopMotors())
+                response.result = isr_m3_ros1_driver::RobotCommand::Response::RESULT_SUCCESS;
+              else
+                ROS_ERROR("Stop motor failed");
+            }
+            else
+            {
+              ROS_INFO("Resume motor");
+              if (ResumeMotors())
+                response.result = isr_m3_ros1_driver::RobotCommand::Response::RESULT_SUCCESS;
+              else
+                ROS_ERROR("Resume motor failed");
+            }
+            break;
+          default:
+            break;
+        }
 
-				this->serial_io_mut_.unlock();
-				break;
-			}
-		}
+        // ROS_INFO("received request.command: %d", request.command);
+        // ROS_INFO("received request.val: %d", request.val);
+        // ROS_INFO("sent response.result: %d", response.result);
 
-		if (response.result == isr_m3_ros1_driver::RobotCommand::Response::RESULT_FAIL) return false;
+        this->serial_io_mut_.unlock();
+        break;
+      }
+    }
 
-		return true;
-	}
+    if (response.result == isr_m3_ros1_driver::RobotCommand::Response::RESULT_FAIL)
+      return false;
 
-	// serial io
-	boost::asio::io_service io;
-	boost::asio::serial_port serial_; /// @brief Actual serial port object for reading/writing to robot
+    return true;
+  }
 
-	// serial io thread
-	ros::WallTimer timer_;
-	std::mutex serial_io_mut_;
+  // serial io
+  boost::asio::io_service io;
+  boost::asio::serial_port serial_;  /// @brief Actual serial port object for reading/writing to robot
 
-	// cmd_vel subscription
-    ros::Subscriber cmd_vel_sub_;
-    geometry_msgs::Twist cmd_vel_msg_;
+  // serial io thread
+  ros::WallTimer timer_;
+  std::mutex serial_io_mut_;
 
-	// odometry publisher
-    ros::Publisher odom_pub_;
+  // cmd_vel subscription
+  ros::Subscriber cmd_vel_sub_;
+  geometry_msgs::Twist cmd_vel_msg_;
 
-	// robot status publisher
-	ros::Publisher robot_status_pub_;
-	isr_m3_ros1_driver::RobotStatusStamped robot_status_msg_;
-	isr_m3_ros1_driver::RobotStatusStamped robot_status_msg_old_;
+  // odometry publisher
+  ros::Publisher odom_pub_;
 
-	// robot command service server
-    ros::ServiceServer robot_cmd_srv_;
-	
-	/**
-	* @brief DeadReckoning
-	* Do not need to use this func. 'SetVel' func calls this function.
-	*/
-	void DeadReckoning(long dl, long dr);	// Do not need to use this func. 'SetVel' func calls this function.
+  // robot status publisher
+  ros::Publisher robot_status_pub_;
+  isr_m3_ros1_driver::RobotStatusStamped robot_status_msg_;
+  isr_m3_ros1_driver::RobotStatusStamped robot_status_msg_old_;
 
-	bool SendData(uint8_t command, uint8_t numparam, uint8_t* params);
-	std::vector<uint8_t> ReceiveData(uint8_t& command);
+  // robot command service server
+  ros::ServiceServer robot_cmd_srv_;
 
-	std::vector<uint8_t> Word2Bytes(int16_t dat);
-	std::vector<uint8_t> Long2Bytes(int32_t dat);
-	int16_t Bytes2Word(uint8_t* data);
-	int32_t Bytes2Long(uint8_t* data);
+  /**
+   * @brief DeadReckoning
+   * Do not need to use this func. 'SetVel' func calls this function.
+   */
+  void DeadReckoning(long dl, long dr);  // Do not need to use this func. 'SetVel' func calls this function.
+
+  bool SendData(uint8_t command, uint8_t numparam, uint8_t* params);
+  std::vector<uint8_t> ReceiveData(uint8_t& command);
+
+  std::vector<uint8_t> Word2Bytes(int16_t dat);
+  std::vector<uint8_t> Long2Bytes(int32_t dat);
+  int16_t Bytes2Word(uint8_t* data);
+  int32_t Bytes2Long(uint8_t* data);
 };
-	
-} // namespace isr_m3_driver
 
-#endif // _isr_m3_H
+}  // namespace isr_m3_driver
+
+#endif  // _isr_m3_H
