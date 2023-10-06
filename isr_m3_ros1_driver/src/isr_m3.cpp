@@ -335,7 +335,7 @@ bool isr_m3::ReadEncoder(void)
 		long dl = (left_encoder_ - _leftEncoderPrev);
 		long dr = (right_encoder_ - _rightEncoderPrev);
 
-		DeadReckoning(dl, dr);
+		DeadReckoning(-dl, -dr);
 
 		return true;
 	}
