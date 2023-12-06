@@ -1,10 +1,15 @@
 <launch>
+    <!-- Receive the keyboard msg and publish cmd_vel topic -->
     <node pkg="isr_m3_ros1_driver" type="keyboard_controller_node.py" name="keyboard_controller_node" output="screen"/>
+    
+    <!-- Convert the keyboard input to ROS msg -->
     <node pkg="keyboard" type="keyboard" name="keyboard_node">
         <param name="allow_repeat" value="false" />
         <param name="repeat_delay" value="SDL_DEFAULT_REPEAT_DELAY" />
         <param name="repeat_interval" value="SDL_DEFAULT_REPEAT_INTERVAL" />
     </node>
+
+    <!-- Control the robot wheel. Publish wheel odometry and the corresponding transform -->
     <node pkg="isr_m3_ros1_driver" type="isr_m3_driver_node" name="isr_m3_driver_node" output="screen">
         <param name="port" value="/dev/ttyACM0" />
         <param name="baud" value="115200" />
