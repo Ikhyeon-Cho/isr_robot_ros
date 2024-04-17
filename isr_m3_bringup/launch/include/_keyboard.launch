@@ -9,9 +9,4 @@
         <param name="repeat_interval" value="SDL_DEFAULT_REPEAT_INTERVAL" />
     </node>
 
-    <!-- Control the robot wheel. Publish wheel odometry and the corresponding transform -->
-    <node pkg="isr_m3_base" type="isr_m3_driver_node" name="isr_m3_driver_node" output="screen">
-        <param name="port" value="/dev/ttyACM0" />
-        <param name="baud" value="115200" />
-    </node>
 </launch>

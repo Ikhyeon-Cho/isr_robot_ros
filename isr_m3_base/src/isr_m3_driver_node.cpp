@@ -16,7 +16,10 @@ int main(int argc, char* argv[])
     nh.param<int>("baudrate", baudrate, 115200);
 
   if (!isr_m3->ConnectRobot(port, baudrate))
+  {
+    ros::shutdown();
     return 1;
+  }
 
   std::cout << "OK Ready" << std::endl;
 

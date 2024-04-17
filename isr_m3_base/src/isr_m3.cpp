@@ -26,7 +26,9 @@ bool M3::ConnectRobot(const std::string& port, const int baudrate)
   }
   catch (boost::system::system_error& e)
   {
-    std::cout << "Cannot open port " << port << std::endl;
+    // color red
+    std::cout << "\033[1;31mPort: " << port << "\033[0m" << std::endl;
+    std::cout << "\033[1;31mError: " << e.what() << "\033[0m" << std::endl;
     return false;
   }
 
