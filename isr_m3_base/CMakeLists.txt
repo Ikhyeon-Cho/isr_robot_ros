@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(isr_m3_ros1_driver)
+project(isr_m3_base)
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
@@ -39,7 +39,7 @@ generate_messages(
 
 catkin_package(
 #  INCLUDE_DIRS include
-#  LIBRARIES isr_m3_ros1_driver
+#  LIBRARIES isr_m3_base
   CATKIN_DEPENDS roscpp rospy std_msgs tf2 tf2_ros geometry_msgs nav_msgs
 #  DEPENDS system_lib
 )

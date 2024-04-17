@@ -5,7 +5,7 @@ import rospy
 import traceback
 from keyboard.msg import Key
 from geometry_msgs.msg import Twist
-from isr_m3_ros1_driver.srv import *
+from isr_m3_base.srv import *
 
 twist = Twist()
 twist.linear.x = 0

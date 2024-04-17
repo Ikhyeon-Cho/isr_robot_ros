@@ -6,7 +6,7 @@ int main(int argc, char* argv[])
 
   ros::NodeHandle nh;
 
-  auto isr_m3 = isr_m3_driver::ISR_M3::create(nh);
+  auto isr_m3 = isr_robot::M3::create(nh);
 
   std::string port;
   int baudrate;

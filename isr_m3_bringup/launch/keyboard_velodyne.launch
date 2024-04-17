@@ -1,6 +1,6 @@
 <launch>
-  <!-- M3 driver with joy control -->
-  <include file="$(find isr_m3_ros1_driver)/launch/joy_controller.launch" />
+  <!-- M3 driver with keyboard control -->
+  <include file="$(find isr_m3_base)/launch/keyboard.launch" />
 
   <!-- velodyne VLP 16 -->
   <include file="$(find velodyne_pointcloud)/launch/VLP16_points.launch" >

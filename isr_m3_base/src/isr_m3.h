@@ -8,8 +8,8 @@
 #include <geometry_msgs/Quaternion.h>
 #include <geometry_msgs/TransformStamped.h>
 #include <nav_msgs/Odometry.h>
-#include <isr_m3_ros1_driver/RobotStatusStamped.h>
-#include <isr_m3_ros1_driver/RobotCommand.h>
+#include <isr_m3_base/RobotStatusStamped.h>
+#include <isr_m3_base/RobotCommand.h>
 
 #include <boost/asio.hpp>
 #include <boost/array.hpp>
@@ -24,17 +24,17 @@
 
 using namespace std::chrono_literals;
 
-namespace isr_m3_driver
+namespace isr_robot
 {
-class ISR_M3
+class M3
 {
 public:
-  const ISR_M3& operator=(const ISR_M3&) = delete;
-  ISR_M3(const ISR_M3&) = delete;
+  const M3& operator=(const M3&) = delete;
+  M3(const M3&) = delete;
 
-  static std::shared_ptr<ISR_M3> create(ros::NodeHandle& nh)
+  static std::shared_ptr<M3> create(ros::NodeHandle& nh)
   {
-    auto isr_m3_shared_ptr = std::shared_ptr<ISR_M3>(new ISR_M3(nh));
+    auto isr_m3_shared_ptr = std::shared_ptr<M3>(new M3(nh));
     isr_m3_shared_ptr->weak_self_ = isr_m3_shared_ptr;
     return isr_m3_shared_ptr;
   }
@@ -91,12 +91,12 @@ public:
   } velocity_;  // Robot velocity calculated by dead-reckoning (Unit: m, m, rad)
 
 private:
-  std::weak_ptr<ISR_M3> weak_self_;
+  std::weak_ptr<M3> weak_self_;
   ros::NodeHandle nh_;
-  ISR_M3(ros::NodeHandle& nh) : nh_(nh), serial_(io)
+  M3(ros::NodeHandle& nh) : nh_(nh), serial_(io)
   {
     // Initialize cmd_vel msg subscription
-    cmd_vel_sub_ = nh_.subscribe("cmd_vel", 10, &ISR_M3::cmd_vel_callback, this);
+    cmd_vel_sub_ = nh_.subscribe("cmd_vel", 10, &M3::cmd_vel_callback, this);
     cmd_vel_msg_.linear.x;
     cmd_vel_msg_.angular.z;
 
@@ -104,12 +104,12 @@ private:
     odom_pub_ = nh_.advertise<nav_msgs::Odometry>("odom", 10);
 
     // Initialize robot status msg publisher
-    robot_status_pub_ = nh_.advertise<isr_m3_ros1_driver::RobotStatusStamped>("robot_status", 10);
+    robot_status_pub_ = nh_.advertise<isr_m3_base::RobotStatusStamped>("robot_status", 10);
     robot_status_msg_.header.stamp = ros::Time::now();
     robot_status_msg_old_.header.stamp = ros::Time::now();
 
     // Initialize robot command service server
-    robot_cmd_srv_ = nh_.advertiseService("robot_cmd", &ISR_M3::robot_cmd_callback, this);
+    robot_cmd_srv_ = nh_.advertiseService("robot_cmd", &M3::robot_cmd_callback, this);
   }
 
   void cmd_vel_callback(const geometry_msgs::Twist::ConstPtr msg)
@@ -119,29 +119,29 @@ private:
                     << "v: " << this->cmd_vel_msg_.linear.x << " / w: " << this->cmd_vel_msg_.angular.z);
   }
 
-  bool robot_cmd_callback(isr_m3_ros1_driver::RobotCommand::Request& request,
-                          isr_m3_ros1_driver::RobotCommand::Response& response)
+  bool robot_cmd_callback(isr_m3_base::RobotCommand::Request& request,
+                          isr_m3_base::RobotCommand::Response& response)
   {
     while (ros::ok())
     {
       if (this->serial_io_mut_.try_lock())
       {
-        response.result = isr_m3_ros1_driver::RobotCommand::Response::RESULT_FAIL;
+        response.result = isr_m3_base::RobotCommand::Response::RESULT_FAIL;
         switch (request.command)
         {
-          case isr_m3_ros1_driver::RobotCommand::Request::COMMAND_INITIALIZE:
+          case isr_m3_base::RobotCommand::Request::COMMAND_INITIALIZE:
             ROS_INFO("Initialize motor");
             if (Initialize())
-              response.result = isr_m3_ros1_driver::RobotCommand::Response::RESULT_SUCCESS;
+              response.result = isr_m3_base::RobotCommand::Response::RESULT_SUCCESS;
             else
               ROS_ERROR("Initialize motor failed");
             break;
-          case isr_m3_ros1_driver::RobotCommand::Request::COMMAND_ENABLE_MOTOR:
+          case isr_m3_base::RobotCommand::Request::COMMAND_ENABLE_MOTOR:
             if (request.val == 0)
             {
               ROS_INFO("Enable motor");
               if (EnableMotors())
-                response.result = isr_m3_ros1_driver::RobotCommand::Response::RESULT_SUCCESS;
+                response.result = isr_m3_base::RobotCommand::Response::RESULT_SUCCESS;
               else
                 ROS_ERROR("Enable motor failed");
             }
@@ -149,17 +149,17 @@ private:
             {
               ROS_INFO("Disable motor");
               if (DisableMotors())
-                response.result = isr_m3_ros1_driver::RobotCommand::Response::RESULT_SUCCESS;
+                response.result = isr_m3_base::RobotCommand::Response::RESULT_SUCCESS;
               else
                 ROS_ERROR("Disable motor failed");
             }
             break;
-          case isr_m3_ros1_driver::RobotCommand::Request::COMMAND_STOP_MOTOR:
+          case isr_m3_base::RobotCommand::Request::COMMAND_STOP_MOTOR:
             if (request.val == 0)
             {
               ROS_INFO("Stop motor");
               if (StopMotors())
-                response.result = isr_m3_ros1_driver::RobotCommand::Response::RESULT_SUCCESS;
+                response.result = isr_m3_base::RobotCommand::Response::RESULT_SUCCESS;
               else
                 ROS_ERROR("Stop motor failed");
             }
@@ -167,7 +167,7 @@ private:
             {
               ROS_INFO("Resume motor");
               if (ResumeMotors())
-                response.result = isr_m3_ros1_driver::RobotCommand::Response::RESULT_SUCCESS;
+                response.result = isr_m3_base::RobotCommand::Response::RESULT_SUCCESS;
               else
                 ROS_ERROR("Resume motor failed");
             }
@@ -185,7 +185,7 @@ private:
       }
     }
 
-    if (response.result == isr_m3_ros1_driver::RobotCommand::Response::RESULT_FAIL)
+    if (response.result == isr_m3_base::RobotCommand::Response::RESULT_FAIL)
       return false;
 
     return true;
@@ -208,8 +208,8 @@ private:
 
   // robot status publisher
   ros::Publisher robot_status_pub_;
-  isr_m3_ros1_driver::RobotStatusStamped robot_status_msg_;
-  isr_m3_ros1_driver::RobotStatusStamped robot_status_msg_old_;
+  isr_m3_base::RobotStatusStamped robot_status_msg_;
+  isr_m3_base::RobotStatusStamped robot_status_msg_old_;
 
   // robot command service server
   ros::ServiceServer robot_cmd_srv_;
@@ -229,6 +229,6 @@ private:
   int32_t Bytes2Long(uint8_t* data);
 };
 
-}  // namespace isr_m3_driver
+}  // namespace isr_robot
 
 #endif  // _isr_m3_H
