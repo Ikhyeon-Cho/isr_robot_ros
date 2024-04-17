@@ -1,0 +1,17 @@
+<launch>
+  <arg name="use_joy" default="true" />
+  <arg name="use_camera" default="false" />
+  <arg name="publish_odom_tf" default="true" />
+
+  <!-- Run ISR-M3 Base using keyboard or joystick -->
+  <include file="$(find isr_m3_bringup)/launch/run_base.launch">
+    <arg name="use_joy" value="$(arg use_joy)" />
+    <arg name="publish_odom_tf" value="$(arg publish_odom_tf)" />
+  </include>
+
+  <!-- Run Sensors -->
+  <include file="$(find isr_m3_bringup)/launch/include/_sensor.launch">
+    <arg name="use_camera" value="$(arg use_camera)" />
+  </include>
+
+</launch>

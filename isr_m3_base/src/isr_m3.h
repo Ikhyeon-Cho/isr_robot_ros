@@ -93,6 +93,7 @@ public:
 private:
   std::weak_ptr<M3> weak_self_;
   ros::NodeHandle nh_;
+  bool publish_tf_{ nh_.param<bool>("isr_m3/publish_tf", true) };
   M3(ros::NodeHandle& nh) : nh_(nh), serial_(io)
   {
     // Initialize cmd_vel msg subscription
@@ -119,8 +120,7 @@ private:
                     << "v: " << this->cmd_vel_msg_.linear.x << " / w: " << this->cmd_vel_msg_.angular.z);
   }
 
-  bool robot_cmd_callback(isr_m3_base::RobotCommand::Request& request,
-                          isr_m3_base::RobotCommand::Response& response)
+  bool robot_cmd_callback(isr_m3_base::RobotCommand::Request& request, isr_m3_base::RobotCommand::Response& response)
   {
     while (ros::ok())
     {

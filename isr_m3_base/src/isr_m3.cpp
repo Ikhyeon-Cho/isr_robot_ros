@@ -70,21 +70,25 @@ bool M3::ConnectRobot(const std::string& port, const int baudrate)
     // 	<< "l: " << this->left_encoder_
     // 	<< " / r: " << this->right_encoder_);
 
-    // broadcast odometry transform
-    static tf2_ros::TransformBroadcaster odom_tf_broadcaster_;
-    geometry_msgs::Quaternion odom_quat = createQuaternionMsgFromYaw(position_.theta);
-    geometry_msgs::TransformStamped odom_tf;
-    odom_tf.header.stamp = this->cur_encoder_time_;
-    odom_tf.header.frame_id = "odom";
-    odom_tf.child_frame_id = "base_link";
-    odom_tf.transform.translation.x = position_.x;
-    odom_tf.transform.translation.y = position_.y;
-    odom_tf.transform.translation.z = 0.0;
-    odom_tf.transform.rotation = odom_quat;
-    odom_tf_broadcaster_.sendTransform(odom_tf);
+    if (publish_tf_)
+    {
+      // broadcast odometry transform
+      static tf2_ros::TransformBroadcaster odom_tf_broadcaster_;
+      geometry_msgs::Quaternion odom_quat = createQuaternionMsgFromYaw(position_.theta);
+      geometry_msgs::TransformStamped odom_tf;
+      odom_tf.header.stamp = this->cur_encoder_time_;
+      odom_tf.header.frame_id = "odom";
+      odom_tf.child_frame_id = "base_link";
+      odom_tf.transform.translation.x = position_.x;
+      odom_tf.transform.translation.y = position_.y;
+      odom_tf.transform.translation.z = 0.0;
+      odom_tf.transform.rotation = odom_quat;
+      odom_tf_broadcaster_.sendTransform(odom_tf);
+    }
 
     // publish odometry message
     nav_msgs::Odometry odom;
+    geometry_msgs::Quaternion odom_quat = createQuaternionMsgFromYaw(position_.theta);
     odom.header.stamp = this->cur_encoder_time_;
     odom.header.frame_id = "odom";
     odom.child_frame_id = "base_link";

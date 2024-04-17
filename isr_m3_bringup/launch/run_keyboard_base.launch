@@ -1,7 +1,0 @@
-<launch>
-
-  <include file="$(find isr_m3_bringup)/launch/include/_m3_driver.launch" />
-
-  <include file="$(find isr_m3_bringup)/launch/include/_keyboard.launch" />
-
-</launch>
