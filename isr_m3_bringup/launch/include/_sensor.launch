@@ -1,0 +1,8 @@
+<launch>
+    <arg name="use_camera" default="false" />
+
+    <include file="$(find isr_m3_bringup)/launch/include/_velodyne_front.launch" />
+
+    <include if="$(arg use_camera)" file="$(find realsense_ros_tools)/launch/rs_camera.launch" />
+
+</launch>

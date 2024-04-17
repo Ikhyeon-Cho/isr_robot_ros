@@ -1,8 +1,8 @@
 <launch>
   <!-- velodyne VLP 16 -->
   <include file="$(find velodyne_pointcloud)/launch/VLP16_points.launch">
-    <arg name="device_ip" value="192.168.1.201" />
+    <arg name="device_ip" value="192.168.1.203" />
     <arg name="frame_id" value="velodyne" />
-    <arg name="port" value="2368" />
+    <arg name="port" value="2370" />
   </include>
 </launch>
