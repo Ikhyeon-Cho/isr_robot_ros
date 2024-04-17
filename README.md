@@ -11,7 +11,7 @@ Use the following commands to download and compile the package.
 cd ~/catkin_ws/src
 git clone https://github.com/Ikhyeon-Cho/isr_robot_ros.git
 cd ..
-catkin build  # or catkin_make
+catkin build isr_m3_bringup  # or catkin_make
 ```
 
 ### Run the ROS driver
