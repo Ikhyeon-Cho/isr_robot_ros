@@ -15,10 +15,10 @@ public:
   EncoderCounter(unsigned char countMode = 4);
 
   void Initialize(unsigned char countMode);
-  
+
   void ResetRightEncoder(void);
   void ResetLeftEncoder(void);
-  
+
   unsigned long ReadRightEncoderCount(void);
   unsigned long ReadLeftEncoderCount(void);
 
@@ -29,14 +29,14 @@ private:
   unsigned char busByte;
 };
 
-#define MEGA_QUADRATURE_ENCODER_COUNTER_PIN_XY_RL       37
-#define MEGA_QUADRATURE_ENCODER_COUNTER_PIN_OE          36 // Active LOW
-#define MEGA_QUADRATURE_ENCODER_COUNTER_PIN_EN1         35
-#define MEGA_QUADRATURE_ENCODER_COUNTER_PIN_EN2         34
-#define MEGA_QUADRATURE_ENCODER_COUNTER_PIN_SEL1        33
-#define MEGA_QUADRATURE_ENCODER_COUNTER_PIN_SEL2        32
-#define MEGA_QUADRATURE_ENCODER_COUNTER_PIN_RSTX_RIGHT  31 // Active LOW
-#define MEGA_QUADRATURE_ENCODER_COUNTER_PIN_RSTY_LEFT   30 // Active LOW
+#define MEGA_QUADRATURE_ENCODER_COUNTER_PIN_XY_RL 37
+#define MEGA_QUADRATURE_ENCODER_COUNTER_PIN_OE 36  // Active LOW
+#define MEGA_QUADRATURE_ENCODER_COUNTER_PIN_EN1 35
+#define MEGA_QUADRATURE_ENCODER_COUNTER_PIN_EN2 34
+#define MEGA_QUADRATURE_ENCODER_COUNTER_PIN_SEL1 33
+#define MEGA_QUADRATURE_ENCODER_COUNTER_PIN_SEL2 32
+#define MEGA_QUADRATURE_ENCODER_COUNTER_PIN_RSTX_RIGHT 31  // Active LOW
+#define MEGA_QUADRATURE_ENCODER_COUNTER_PIN_RSTY_LEFT 30   // Active LOW
 
 // Arduino Mega Digital Pin 30 [ATMEL ATMEGA PORTC 7] -> HCTL 2032 Pin 11 RSTY - Active LOW
 // Arduino Mega Digital Pin 31 [ATMEL ATMEGA PORTC 6] -> HCTL 2032 Pin 12 RSTX - Active LOW
@@ -47,7 +47,7 @@ private:
 // Arduino Mega Digital Pin 36 [ATMEL ATMEGA PORTC 1] -> HCTL 2032 Pin  7 OE   - Active LOW
 // Arduino Mega Digital Pin 37 [ATMEL ATMEGA PORTC 0] -> HCTL 2032 Pin 32 X/Y
 
-#define MEGA_QUADRATURE_ENCODER_COUNTER_PORT_DATA  PINA  // Encoder data pin is connected to PORTA
+#define MEGA_QUADRATURE_ENCODER_COUNTER_PORT_DATA PINA  // Encoder data pin is connected to PORTA
 
 // Arduino Mega Digital Pin 22 [ATMEL ATMEGA PORTA 0] <- HCTL 2032 Pin  1 D0
 // Arduino Mega Digital Pin 23 [ATMEL ATMEGA PORTA 1] <- HCTL 2032 Pin 15 D1
@@ -90,4 +90,4 @@ private:
 // Pin 9 Do not connect
 // Pin 10 Do not connect
 
-#endif // _ENCODERCOUNTER_H
+#endif  // _ENCODERCOUNTER_H

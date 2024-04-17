@@ -418,7 +418,7 @@ void ISR_M3::DeadReckoning(long dl_pulse, long dr_pulse)
   velocity_.v = (dl + dr) / 2.0;
   velocity_.w = (dr - dl) / WHEEL_BASE_M;
 
-	// alias
+  // alias
   const auto& v = velocity_.v;
   const auto& w = velocity_.w;
 

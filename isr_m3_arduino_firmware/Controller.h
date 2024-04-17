@@ -11,21 +11,22 @@
 #include "EncoderCounter.h"
 #include "Arduino.h"
 
-class ControllerBoard {
+class ControllerBoard
+{
 public:
   ControllerBoard();
-  
+
 public:
   void Initialize();
   void SpinOnce();
 
   void MotorSpeed(int leftMotorRPM, int rightMotorRPM);
-  
+
   void MotorEnable(bool value);
   void MotorDirection(int leftMotorRPM, int rightMotorRPM);
   void MotorStop(bool value);
   void ReadActualMotorSpeed(int& actual_leftMotorRPM, int& actual_rightMotorRPM);
-  
+
   void ResetEncoder(void);  // Reset left & right encoders
   void ReadEncoder(unsigned long& leftEncoder, unsigned long& rightEncoder);
 
@@ -39,7 +40,7 @@ private:
   bool motorEnableStatus = false;
   bool motorStopStatus = false;
   bool rightMotorDirection, leftMotorDirection;
-  
+
   EncoderCounter encoderCounter;
 
   EasyTransfer2 messageIn;
@@ -51,50 +52,51 @@ extern ControllerBoard controller;
 /* A Message Structure
 Initialize (0 byte):
   byte COMMAND_Initialize;
-  
+
 Enable (1 byte):
   byte COMMAND_MOTOR_ENABLE, byte value;
 Run (4 bytes):
   byte COMMAND_MOTOR_RUN, int speedL, int speedR;
 Stop (1 byte):
-  byte COMMAND_MOTOR_STOP, byte value;  
+  byte COMMAND_MOTOR_STOP, byte value;
 Actual Motor Speed (0 byte):
   byte COMMAND_ACTUAL_MOTOR_SPEED_READ;
 Actual Motor Speed _return_ (6 bytes):
   byte COMMAND_ACTUAL_MOTOR_SPEED_READ_RE, byte directionL, byte directionR, int actualSpeedL, int actualSpeedR;
-  
+
 Read Encoder (0 byte):
   byte COMMAND_ENCODER_READ;
 Read Encoder _return_ (8 bytes):
   byte COMMAND_ENCODER_READ_RE, unsigned long leftEncoder, unsigned long rightEncoder;
 Reset Encoder (0 byte):
   byte COMMAND_ENCODER_RESET;
-  
+
 Status (0 byte):
   byte COMMAND_STATUS;
 Status _return_ (3 bytes):
   byte COMMAND_STATUS_RE, byte motorEnableStatus, byte motorStopStatus, byte emergencyButtonPressed;
 */
 
-#define COMMAND_INITIALIZE        0
+#define COMMAND_INITIALIZE 0
 
-#define COMMAND_MOTOR_ENABLE      1
-#define COMMAND_MOTOR_RUN         2
-#define COMMAND_MOTOR_STOP        3
-#define COMMAND_MOTOR_ACTUAL_SPEED_READ     4
-#define COMMAND_MOTOR_ACTUAL_SPEED_READ_RE  5 // for return message
+#define COMMAND_MOTOR_ENABLE 1
+#define COMMAND_MOTOR_RUN 2
+#define COMMAND_MOTOR_STOP 3
+#define COMMAND_MOTOR_ACTUAL_SPEED_READ 4
+#define COMMAND_MOTOR_ACTUAL_SPEED_READ_RE 5  // for return message
 
-#define COMMAND_ENCODER_READ      11
-#define COMMAND_ENCODER_READ_RE   12  // for return message
-#define COMMAND_ENCODER_RESET     13
+#define COMMAND_ENCODER_READ 11
+#define COMMAND_ENCODER_READ_RE 12  // for return message
+#define COMMAND_ENCODER_RESET 13
 
-#define COMMAND_STATUS            21
-#define COMMAND_STATUS_RE         22  // for return message
+#define COMMAND_STATUS 21
+#define COMMAND_STATUS_RE 22  // for return message
 
 #define MOTOR_MAX_RPM 4650
-#define MOTOR_PWM_TOP 46500 //MAX_MOTOR_RPM * 10, 16MHz(no prescale) / MAX_MOTOR_RPM = 344.086Hz (ESCON PWM frequency range: 10Hz ~ 5kHz)
-#define MOTOR_PWM_MIN 4650  //MAX_MOTOR_RPM * 1
-#define MOTOR_PWM_MAX 41850 //MAX_MOTOR_RPM * 9
+#define MOTOR_PWM_TOP                                                                                                  \
+  46500  // MAX_MOTOR_RPM * 10, 16MHz(no prescale) / MAX_MOTOR_RPM = 344.086Hz (ESCON PWM frequency range: 10Hz ~ 5kHz)
+#define MOTOR_PWM_MIN 4650   // MAX_MOTOR_RPM * 1
+#define MOTOR_PWM_MAX 41850  // MAX_MOTOR_RPM * 9
 
 /*** Right Wheel - ESCON Connection Info
    *** Digital I/O (ESCON Pin  -  Arduino Pin)
@@ -113,12 +115,12 @@ Status _return_ (3 bytes):
    Pin6(AnOUT2) -  NC
    Pin7(GND)    -  GND
  */
-#define RIGHT_MOTOR_FORWARD_DIR         1
-#define RIGHT_MOTOR_BACKWARD_DIR        0
-#define PIN_RIGHT_MOTOR_PWM_DIG         8  // Digital Pin8:  PWM - Set Value
-#define PIN_RIGHT_MOTOR_EN_DIG          9  // Digital Pin9:  Enable
-#define PIN_RIGHT_MOTOR_DIR_DIG         10 // Digital Pin10: Direction
-#define PIN_RIGHT_MOTOR_STOP_DIG        11 // Digital Pin11: Stop
+#define RIGHT_MOTOR_FORWARD_DIR 1
+#define RIGHT_MOTOR_BACKWARD_DIR 0
+#define PIN_RIGHT_MOTOR_PWM_DIG 8          // Digital Pin8:  PWM - Set Value
+#define PIN_RIGHT_MOTOR_EN_DIG 9           // Digital Pin9:  Enable
+#define PIN_RIGHT_MOTOR_DIR_DIG 10         // Digital Pin10: Direction
+#define PIN_RIGHT_MOTOR_STOP_DIG 11        // Digital Pin11: Stop
 #define PIN_RIGHT_MOTOR_ACTUAL_SPEED_AN 0  // Analog pin0:   Actual Motor Speed
 
 /*** Left Wheel - ESCON Connection Info
@@ -138,17 +140,17 @@ Status _return_ (3 bytes):
    Pin6(AnOUT2) -  NC
    Pin7(GND)    -  GND
  */
-#define LEFT_MOTOR_FORWARD_DIR         0
-#define LEFT_MOTOR_BACKWARD_DIR        1
-#define PIN_LEFT_MOTOR_PWM_DIG         7 // Digital Pin7: PWM - Set Value
-#define PIN_LEFT_MOTOR_EN_DIG          6 // Digital Pin6: Enable
-#define PIN_LEFT_MOTOR_DIR_DIG         5 // Digital Pin5: Direction
-#define PIN_LEFT_MOTOR_STOP_DIG        4 // Digital Pin4: Stop
-#define PIN_LEFT_MOTOR_ACTUAL_SPEED_AN 1 // Analog pin1:  Actual Motor Speed
+#define LEFT_MOTOR_FORWARD_DIR 0
+#define LEFT_MOTOR_BACKWARD_DIR 1
+#define PIN_LEFT_MOTOR_PWM_DIG 7          // Digital Pin7: PWM - Set Value
+#define PIN_LEFT_MOTOR_EN_DIG 6           // Digital Pin6: Enable
+#define PIN_LEFT_MOTOR_DIR_DIG 5          // Digital Pin5: Direction
+#define PIN_LEFT_MOTOR_STOP_DIG 4         // Digital Pin4: Stop
+#define PIN_LEFT_MOTOR_ACTUAL_SPEED_AN 1  // Analog pin1:  Actual Motor Speed
 
 // Emergency Stop Button (using Arduino's internal Pull UP registor)
 // Arduino Mega Digital Pin 13 [ATMEL ATMEGA PORTB 7 (OC0A/OC1C/PCINT7)]
 
 #define PIN_EMERGENCY_STOP_BUTTON 13
 
-#endif // _CONTROLLER_H
+#endif  // _CONTROLLER_H
