@@ -53,11 +53,17 @@ include_directories(
 )
 
 ## Declare a C++ executable
-add_executable(isr_m3_driver_node src/isr_m3_driver_node.cpp src/isr_m3.cpp)
+add_executable(isr_m3_driver_node 
+  src/isr_m3_driver_node.cpp 
+  src/isr_m3.cpp
+)
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
-add_dependencies(isr_m3_driver_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+add_dependencies(isr_m3_driver_node 
+  ${${PROJECT_NAME}_EXPORTED_TARGETS} 
+  ${catkin_EXPORTED_TARGETS}
+)
 
 ## Specify libraries to link a library or executable target against
 target_link_libraries(isr_m3_driver_node

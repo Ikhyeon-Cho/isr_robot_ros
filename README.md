@@ -9,7 +9,7 @@ The repository provides the `isr_m3` ROS driver package implemented for running 
 Use the following commands to download and compile the package.
 ```
 cd ~/catkin_ws/src
-git clone https://github.com/Ikhyeon-Cho/isr_m_series_ros_driver.git
+git clone https://github.com/Ikhyeon-Cho/isr_robot_ros.git
 cd ..
 catkin build  # or catkin_make
 ```

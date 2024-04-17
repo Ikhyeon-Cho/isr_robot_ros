@@ -5,6 +5,7 @@ add_compile_options(-std=c++17)
 find_package(catkin REQUIRED COMPONENTS
     roscpp
     rospy
+    keyboard
 )
 
 catkin_package(
@@ -12,6 +13,7 @@ catkin_package(
   CATKIN_DEPENDS 
     roscpp
     rospy
+    keyboard
 )
 
 ###########

@@ -4,9 +4,8 @@
   <version>0.1.0</version>
   <description>The isr_m3_base package</description>
   <license>BSD</license>
-  <url type="website">https://gitlab.com/isr-ku/ros1/isr_m3</url>
   <author email="donggeun.cha@gmail.com">Donggeun Cha</author>
-  <maintainer email="donggeun.cha@gmail.com">Donggeun Cha</maintainer>
+  <maintainer email="tre0430@korea.ac.kr">Ikhyeon Cho</maintainer>
 
   <buildtool_depend>catkin</buildtool_depend>
 
