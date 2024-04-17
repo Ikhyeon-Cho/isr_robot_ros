@@ -1,5 +1,5 @@
 <launch>
-  <arg name="use_joy" default="true" />
+  <arg name="use_joy" default="false" />
   <arg name="publish_odom_tf" default="true" />
 
   <!-- Run ISR-M3 Base -->
@@ -8,7 +8,12 @@
   </include>
 
   <!-- Controller: Keyboard or Joystick -->
-  <include if="$(arg use_joy)" file="$(find isr_m3_bringup)/launch/include/_joy.launch" />
+  <include if="$(arg use_joy)" file="$(find isr_m3_bringup)/launch/include/_joy.launch">
+    <arg name="scale_linear" default="0.6" />
+    <arg name="scale_linear_turbo" default="1.0" />
+    <arg name="scale_angular" default="1.0" />
+
+  </include>
   <include unless="$(arg use_joy)" file="$(find isr_m3_bringup)/launch/include/_keyboard.launch" />
 
 </launch>

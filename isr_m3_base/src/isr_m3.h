@@ -93,7 +93,6 @@ public:
 private:
   std::weak_ptr<M3> weak_self_;
   ros::NodeHandle nh_;
-  bool publish_tf_{ nh_.param<bool>("isr_m3/publish_tf", true) };
   M3(ros::NodeHandle& nh) : nh_(nh), serial_(io)
   {
     // Initialize cmd_vel msg subscription
@@ -205,6 +204,7 @@ private:
 
   // odometry publisher
   ros::Publisher odom_pub_;
+  bool publish_tf_{ nh_.param<bool>("publish_tf", true) };
 
   // robot status publisher
   ros::Publisher robot_status_pub_;

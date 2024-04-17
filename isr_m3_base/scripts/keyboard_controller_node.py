@@ -85,8 +85,9 @@ def key_callback(data):
 
 def print_instruction():
     print("Running keyboard node...")
+    print()
     print("=======================================================")
-    print("               ISR-M2 Keyboard Controller              ")
+    print("               ISR-MX Keyboard Controller              ")
     print("-------------------------------------------------------")
     print("UP   / DOWN  arrows: linear  velocity incr/decr        ")
     print("LEFT / RIGHT arrows: angular velocity incr/decr        ")

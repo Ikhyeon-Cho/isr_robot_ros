@@ -4,7 +4,7 @@
   <!-- Control the robot wheel. Publish wheel odometry and the corresponding transform -->
   <node pkg="isr_m3_base" type="isr_m3_driver_node" name="isr_m3" output="screen">
     <param name="port" value="/dev/ttyACM0" />
-    <param name="baud" value="115200" />
     <param name="publish_tf" value="$(arg publish_tf)" />
+    <remap from="/isr_m3/cmd_vel" to="/cmd_vel" />
   </node>
 </launch>

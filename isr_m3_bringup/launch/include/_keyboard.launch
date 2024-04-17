@@ -1,6 +1,6 @@
 <launch>
     <!-- Receive the keyboard msg and publish cmd_vel topic -->
-    <node pkg="isr_m3_base" type="keyboard_controller_node.py" name="keyboard_controller_node" output="screen"/>
+    <node pkg="isr_m3_base" type="keyboard_controller_node.py" name="teleop_keyboard_node" output="screen"/>
     
     <!-- Convert the keyboard input to ROS msg -->
     <node pkg="keyboard" type="keyboard" name="keyboard_node">

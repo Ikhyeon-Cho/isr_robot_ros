@@ -49,7 +49,8 @@ bool M3::ConnectRobot(const std::string& port, const int baudrate)
 
   std::this_thread::sleep_for(1s);
 
-  std::cout << "Serial port " << port << " opened at baudrate " << baudrate << std::endl;
+  // color green
+  std::cout << "\033[1;32mSerial port " << port << " opened at baudrate " << baudrate << "\033[0m\n" << std::endl;
 
   if (!Initialize())
     return false;

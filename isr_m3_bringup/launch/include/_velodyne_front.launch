@@ -1,8 +1,12 @@
 <launch>
   <!-- velodyne VLP 16 -->
   <include file="$(find velodyne_pointcloud)/launch/VLP16_points.launch">
+    <arg name="frame_id" value="velodyne_front" />
     <arg name="device_ip" value="192.168.1.203" />
-    <arg name="frame_id" value="velodyne" />
     <arg name="port" value="2370" />
+    <remap from="velodyne_points" to="points" />
   </include>
+
+  <node pkg="tf2_ros" type="static_transform_publisher" name="tf_base_to_lidar_front"
+    args="0 0 0 0 0 0 base_link velodyne_front" />
 </launch>
