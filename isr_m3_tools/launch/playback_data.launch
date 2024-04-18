@@ -5,7 +5,7 @@
   <arg name="enable_pointcloud" default="true" />
 
   <!-- Camera: Raw Image republish && Publish pointcloud -->
-  <include file="$(find realsense_ros_tools)/launch/rs_reproduce.launch">
+  <include file="$(find realsense_ros_tools)/launch/include/_rs_reproduce.launch">
     <arg name="enable_pointcloud" value="$(arg enable_pointcloud)" />
   </include>
 
