@@ -1,3 +1,0 @@
-[submodule "ros-keyboard"]
-	path = ros-keyboard
-	url = https://github.com/lrse/ros-keyboard.git
