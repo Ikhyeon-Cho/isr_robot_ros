@@ -11,7 +11,7 @@
   </include>
 
   <!-- Run Sensors -->
-  <include file="$(find isr_m3_bringup)/launch/include/_sensor.launch">
+  <include file="$(find isr_m3_bringup)/launch/sensor.launch">
     <arg name="use_lidar" value="$(arg use_lidar)" />
     <arg name="use_camera" value="$(arg use_camera)" />
   </include>

@@ -5,7 +5,9 @@
     <!-- VLP 16 LiDAR -->
     <include if="$(arg use_lidar)" file="$(find isr_m3_bringup)/launch/include/_vlp16_horizontal.launch" />
 
+    <!-- <include if="$(arg use_lidar)" file="$(find isr_m3_bringup)/launch/include/_vlp16_tilted.launch" /> -->
+
     <!-- Realsense Camera -->
-    <include if="$(arg use_camera)" file="$(find realsense_ros_tools)/launch/rs_camera.launch" />
+    <include if="$(arg use_camera)" file="$(find isr_m3_bringup)/launch/_realsense_front.launch" />
 
 </launch>

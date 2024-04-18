@@ -1,0 +1,7 @@
+<launch>
+  <!-- Realsense D455 at front -->
+  <include file="$(find realsense_ros_tools)/launch/rs_camera.launch" />
+
+  <node pkg="tf2_ros" type="static_transform_publisher" name="tf_base2lidar_horizontal"
+  args="0.27 0 0.25 0 0 0 base_link camera_link" />
+</launch>
