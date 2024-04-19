@@ -10,6 +10,7 @@
   <depend>roscpp</depend>
   <depend>rospy</depend>
   <depend>isr_m3_base</depend>
+  <depend>isr_m3_tools</depend>
   <depend>keyboard</depend>
   <export>
   </export>
