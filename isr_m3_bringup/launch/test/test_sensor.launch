@@ -1,0 +1,12 @@
+<launch>
+  <arg name="use_lidar" default="true" />
+  <arg name="use_camera" default="false" />
+
+  <include file="$(find isr_m3_bringup)/launch/sensor.launch">
+    <arg name="use_lidar" value="$(arg use_lidar)" />
+    <arg name="use_camera" value="$(arg use_camera)" />
+  </include>
+
+  <!-- Rviz -->
+  <node name="rviz_isr_m3" pkg="rviz" type="rviz" args="-d $(find isr_m3_bringup)/launch/rviz/isr_m3.rviz" />
+</launch>
