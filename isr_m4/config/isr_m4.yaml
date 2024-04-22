@@ -3,3 +3,5 @@ teleop_joy_node:
   scale_linear_turbo: 1.0
   scale_angular: 1.0
 
+isr_m4_driver_node:
+  port: /dev/ttyACM0

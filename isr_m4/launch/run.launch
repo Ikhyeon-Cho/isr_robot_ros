@@ -1,8 +1,9 @@
 <launch>
   <arg name="use_joy" default="false" />
+  <arg name="use_imu" default="true" />
   <arg name="use_lidar" default="true" />
   <arg name="use_camera" default="true" />
-  <arg name="publish_odom_tf" default="true" />
+  <arg name="publish_odom_tf" default="false" />
 
   <!-- Run ISR-M4 Base using keyboard or joystick -->
   <include file="$(find isr_m4)/launch/run_base.launch">
@@ -11,9 +12,13 @@
   </include>
 
   <!-- Run Sensors -->
-  <include file="$(find isr_m4)/launch/sensor.launch">
+  <include file="$(find isr_m4)/launch/include/_sensors.launch">
     <arg name="use_lidar" value="$(arg use_lidar)" />
     <arg name="use_camera" value="$(arg use_camera)" />
+    <arg name="use_imu" value="$(arg use_imu)" />
   </include>
+
+  <!-- Rviz -->
+  <node name="rviz_isr_m4" pkg="rviz" type="rviz" args="-d $(find isr_m4)/launch/rviz/isr_m4.rviz" />
 
 </launch>
