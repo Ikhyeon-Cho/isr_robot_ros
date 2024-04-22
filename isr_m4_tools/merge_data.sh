@@ -1,5 +1,7 @@
 #!/bin/bash
 
+export PATH=$PATH:~/.local/bin
+
 # Check if rosbag-merge is installed
 if ! command -v rosbag-merge &> /dev/null
 then
