@@ -7,18 +7,15 @@
     <arg name="bag_file" value="rs_camera.bag" />
   </include>
 
-  <!-- Record VLP16 horizontal bagfile -->
+  <!-- Record VLP16 bagfile -->
   <include file="$(find velodyne_ros_tools)/launch/VLP16_record.launch">
-    <arg name="frame_id" value="vlp16_horizontal" />
+    <arg name="frame_id" value="velodyne" />
     <arg name="project_dir" value="$(arg project_name)" />
     <arg name="bag_file" value="lidar.bag" />
   </include>
 
-  <!-- Record VLP16 tilted bagfile -->
-  <include file="$(find velodyne_ros_tools)/launch/VLP16_record.launch">
-    <arg name="frame_id" value="vlp16_tilted" />
-    <arg name="project_dir" value="$(arg project_name)" />
-    <arg name="bag_file" value="lidar.bag" />
-  </include>
+  <!-- Record Wheel odometry and IMU -->
+  <node name="m4_proprioception_recorder" pkg="isr_m4_tools" type="record_proprioception.sh" output="screen"
+    args="$(arg project_name)" />
 
 </launch>

@@ -1,16 +1,16 @@
 <launch>
   <arg name="project_name" default="" />
+  <arg name="bag_file" default="isr_m4_dataset.bag" />
   <arg name="playback_speed" default="1" />
   <arg name="start_time" default="0.0" />
-  <arg name="enable_pointcloud" default="true" />
 
   <include file="$(find isr_m4_tools)/launch/playback_data.launch">
     <arg name="project_name" value="$(arg project_name)" />
+    <arg name="bag_file" value="$(arg bag_file)" />
     <arg name="playback_speed" value="$(arg playback_speed)" />
     <arg name="start_time" value="$(arg start_time)" />
-    <arg name="enable_pointcloud" value="$(arg enable_pointcloud)" />
   </include>
 
-  <node name="isr_m4_rosbag" pkg="rviz" type="rviz" args="-d $(find isr_m4_tools)/launch/rviz/isr_m4.rviz" />
+  <node name="rviz_isr_m4" pkg="rviz" type="rviz" args="-d $(find isr_m4_tools)/launch/rviz/isr_m4.rviz" />
 
 </launch>
