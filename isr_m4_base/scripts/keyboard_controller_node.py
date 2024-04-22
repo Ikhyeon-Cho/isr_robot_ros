@@ -84,8 +84,7 @@ def key_callback(data):
         return
 
 def print_instruction():
-    print("Running keyboard node...")
-    print()
+    print("\033[1;92mRunning keyboard node...\033[0m")
     print("=======================================================")
     print("               ISR-MX Keyboard Controller              ")
     print("-------------------------------------------------------")

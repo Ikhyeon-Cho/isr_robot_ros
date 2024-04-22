@@ -1,7 +1,7 @@
 <launch>
   <arg name="use_joy" default="false" />
   <arg name="use_lidar" default="true" />
-  <arg name="use_camera" default="false" />
+  <arg name="use_camera" default="true" />
   <arg name="publish_odom_tf" default="true" />
 
   <!-- Run ISR-M4 Base using keyboard or joystick -->

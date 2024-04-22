@@ -1,15 +1,7 @@
 <launch>
-  <arg name="scale_linear" default="0.5" />
-  <arg name="scale_linear_turbo" default="1.0" />
-  <arg name="scale_angular" default="1.0" />
-
   <!-- Receive the joystick msg and publish cmd_vel topic -->
   <node pkg="teleop_twist_joy" type="teleop_node" name="teleop_joy_node" output="screen">
     <param name="enable_turbo_button" value="7" />
-    <param name="scale_linear" value="$(arg scale_linear)" />
-    <param name="scale_linear_turbo" value="$(arg scale_linear_turbo)" />
-    <param name="scale_angular" value="$(arg scale_angular)" />
-
   </node>
 
   <node pkg="joy" type="joy_node" name="joy_node" output="screen">

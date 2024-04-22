@@ -2,8 +2,8 @@
 
 int main(int argc, char* argv[])
 {
-  ros::init(argc, argv, "isr_m4");
-  ros::NodeHandle nh{ "isr_m4" };
+  ros::init(argc, argv, "isr_m4_driver_node");
+  ros::NodeHandle nh{ "isr_m4_driver_node" };
 
   auto isr_m4 = isr_robot::M4::create(nh);
   std::string port;
