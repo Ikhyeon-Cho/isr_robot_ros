@@ -1,0 +1,24 @@
+<launch>
+  <arg name="project_name" default="m4_dataset" />
+
+  <!-- Record camera bagfile -->
+  <include file="$(find realsense_ros_tools)/launch/rs_record.launch">
+    <arg name="project_dir" value="$(arg project_name)" />
+    <arg name="bag_file" value="rs_camera.bag" />
+  </include>
+
+  <!-- Record VLP16 horizontal bagfile -->
+  <include file="$(find velodyne_ros_tools)/launch/VLP16_record.launch">
+    <arg name="frame_id" value="vlp16_horizontal" />
+    <arg name="project_dir" value="$(arg project_name)" />
+    <arg name="bag_file" value="lidar.bag" />
+  </include>
+
+  <!-- Record VLP16 tilted bagfile -->
+  <include file="$(find velodyne_ros_tools)/launch/VLP16_record.launch">
+    <arg name="frame_id" value="vlp16_tilted" />
+    <arg name="project_dir" value="$(arg project_name)" />
+    <arg name="bag_file" value="lidar.bag" />
+  </include>
+
+</launch>

@@ -1,0 +1,12 @@
+<launch>
+    <!-- Receive the keyboard msg and publish cmd_vel topic -->
+    <node pkg="isr_m4_base" type="keyboard_controller_node.py" name="teleop_keyboard_node" output="screen"/>
+    
+    <!-- Convert the keyboard input to ROS msg -->
+    <node pkg="keyboard" type="keyboard" name="keyboard_node">
+        <param name="allow_repeat" value="false" />
+        <param name="repeat_delay" value="SDL_DEFAULT_REPEAT_DELAY" />
+        <param name="repeat_interval" value="SDL_DEFAULT_REPEAT_INTERVAL" />
+    </node>
+
+</launch>

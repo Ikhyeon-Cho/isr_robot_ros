@@ -1,0 +1,33 @@
+<launch>
+  <arg name="project_name" default="" />
+  <arg name="playback_speed" default="1" />
+  <arg name="start_time" default="0.0" />
+  <arg name="enable_pointcloud" default="true" />
+
+  <!-- Camera: Raw Image republish && Publish pointcloud -->
+  <include file="$(find realsense_ros_tools)/launch/include/_rs_reproduce.launch">
+    <arg name="enable_pointcloud" value="$(arg enable_pointcloud)" />
+  </include>
+
+  <!-- LiDAR: vlp16 horizontal packet to pointcloud -->
+  <include file="$(find velodyne_ros_tools)/launch/include/_VLP16_packet2cloud.launch">
+    <arg name="frame_id" value="vlp16_horizontal" />
+    <arg name="target_frame" value="" />
+    <arg name="min_range" value="0.4" />
+    <arg name="max_range" value="130.0" />
+  </include>
+
+  <!-- LiDAR: vlp16 tilted packet to pointcloud -->
+  <include file="$(find velodyne_ros_tools)/launch/include/_VLP16_packet2cloud.launch">
+    <arg name="frame_id" value="vlp16_tilted" />
+    <arg name="target_frame" value="" />
+    <arg name="min_range" value="0.4" />
+    <arg name="max_range" value="130.0" />
+  </include>
+
+  <!-- Play rosbag -->
+  <param name="/use_sim_time" value="true" />
+  <node name="isr_m4_bag_player" pkg="rosbag" type="play" output="screen"
+    args="--clock -r $(arg playback_speed) -s $(arg start_time) $(env HOME)/Downloads/$(arg project_name)/isr_m4_dataset.bag" />
+
+</launch>

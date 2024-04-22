@@ -1,0 +1,19 @@
+<launch>
+  <arg name="use_joy" default="false" />
+  <arg name="publish_odom_tf" default="true" />
+
+  <!-- Run ISR-M4 Base -->
+  <include file="$(find isr_m4)/launch/include/_m4_driver.launch">
+    <arg name="publish_tf" value="$(arg publish_odom_tf)" />
+  </include>
+
+  <!-- Controller: Keyboard or Joystick -->
+  <include if="$(arg use_joy)" file="$(find isr_m4)/launch/include/_joy.launch">
+    <arg name="scale_linear" default="0.6" />
+    <arg name="scale_linear_turbo" default="1.0" />
+    <arg name="scale_angular" default="1.0" />
+
+  </include>
+  <include unless="$(arg use_joy)" file="$(find isr_m4)/launch/include/_keyboard.launch" />
+
+</launch>

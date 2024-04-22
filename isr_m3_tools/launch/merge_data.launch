@@ -1,5 +1,0 @@
-<launch>
-  <arg name="project_dir" default="" />
-
-  <node name="merge_data" pkg="isr_m3_tools" type="merge_data.sh" output="screen" args="$(arg project_dir)" />
-</launch>
