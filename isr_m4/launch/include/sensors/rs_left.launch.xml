@@ -1,0 +1,8 @@
+<launch>
+  <!-- Realsense D455 at left -->
+  <include file="$(find realsense_ros_tools)/launch/rs_camera.launch">
+    <arg name="camera_ns" value="rs_camera_left" />
+    <arg name="serial_no" value="337122301683" />
+  </include>
+
+</launch>

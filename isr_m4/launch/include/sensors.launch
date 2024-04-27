@@ -1,0 +1,25 @@
+<launch>
+  <arg name="use_lidar" default="true" />
+  <arg name="use_camera" default="true" />
+  <arg name="use_imu" default="true" />
+
+  <!-- Realsense D455 Camera -->
+  <include if="$(arg use_camera)" file="$(find isr_m4)/launch/include/sensors/rs_left.launch.xml" />
+  <include if="$(arg use_camera)" file="$(find isr_m4)/launch/include/sensors/rs_right.launch.xml" />
+
+  <!-- Zed2 Camera -->
+  <include if="$(arg use_camera)" file="$(find isr_m4)/launch/include/sensors/zed2_front.launch.xml" />
+
+  <!-- VLP-16 LiDAR -->
+  <include if="$(arg use_lidar)" file="$(find isr_m4)/launch/include/sensors/velodyne.launch.xml" />
+
+  <!-- Xsens mti-30 IMU -->
+  <include if="$(arg use_imu)" file="$(find isr_m4)/launch/include/sensors/xsens.launch.xml" />
+
+  <!-- Static Transform -->
+  <include file="$(find isr_m4)/launch/include/static_transforms.launch.xml">
+    <arg name="use_lidar" value="$(arg use_lidar)" />
+    <arg name="use_camera" value="$(arg use_camera)" />
+    <arg name="use_imu" value="$(arg use_imu)" />
+  </include>
+</launch>

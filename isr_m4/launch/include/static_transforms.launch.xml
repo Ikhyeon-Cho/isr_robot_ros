@@ -1,0 +1,33 @@
+<launch>
+  <arg name="use_lidar" default="true" />
+  <arg name="use_camera" default="true" />
+  <arg name="use_imu" default="true" />
+
+  <group if="$(arg use_camera)">
+    <!-- Realsense D455 at left-->
+    <node pkg="tf2_ros" type="static_transform_publisher" name="tf_base_to_rs_left"
+      args="0.08 0.244 0.295 1.5708 0.553 3.14159 base_link rs_camera_left_link" />
+
+    <!-- Realsense D455 at right-->
+    <node pkg="tf2_ros" type="static_transform_publisher" name="tf_base_to_rs_right"
+      args="-0.07 -0.244 0.295 -1.5708 0.553 3.14159 base_link rs_camera_right_link" />
+
+    <!-- Zed2 at front -->
+    <!-- Note: See sensors/zed2.launch file -->
+    <node pkg="tf2_ros" type="static_transform_publisher" name="tf_base_to_zed2_front"
+      args="0.40 0 0.405 0 0.3590 0 base_link zed2_base_link" />
+  </group>
+
+  <!-- Velodyne VLP-16 -->
+  <group if="$(arg use_lidar)">
+    <node pkg="tf2_ros" type="static_transform_publisher" name="tf_base_to_velodyne"
+      args="0.21 0 0.585 0 -0.005 0 base_link velodyne" />
+  </group>
+
+  <!-- Xsens IMU -->
+  <group if="$(arg use_imu)">
+    <node pkg="tf2_ros" type="static_transform_publisher" name="tf_base_to_imu"
+      args="0.3 0 0.355 0 0 0 base_link imu_link" />
+  </group>
+
+</launch>
