@@ -1,21 +1,40 @@
 <launch>
   <arg name="project_name" default="m4_dataset" />
+  <arg name="enable_imu" default="false" />   <!-- Data recording option -->
 
-  <!-- Record camera bagfile -->
-  <include file="$(find realsense_ros_tools)/launch/rs_record.launch">
+  <!-- 1. Camera at front -->
+  <include file="$(find zed2_ros_tools)/launch/zed2_record.launch">
+    <arg name="camera_ns" value="zed2" />
     <arg name="project_dir" value="$(arg project_name)" />
-    <arg name="bag_file" value="rs_camera.bag" />
+    <arg name="bag_file" value="zed2_camera.bag" />
+    <arg name="enable_imu" value="$(arg enable_imu)" />
   </include>
 
-  <!-- Record VLP16 bagfile -->
+  <!-- 2. Camera at left -->
+  <include file="$(find realsense_ros_tools)/launch/rs_record.launch">
+    <arg name="camera_ns" value="rs_camera_left" />
+    <arg name="project_dir" value="$(arg project_name)" />
+    <arg name="bagfile_name" value="rs_camera_left.bag" />
+    <arg name="enable_imu" value="$(arg enable_imu)" />
+  </include>
+
+  <!-- 3. Camera at right -->
+  <include file="$(find realsense_ros_tools)/launch/rs_record.launch">
+    <arg name="camera_ns" value="rs_camera_right" />
+    <arg name="project_dir" value="$(arg project_name)" />
+    <arg name="bagfile_name" value="rs_camera_right.bag" />
+    <arg name="enable_imu" value="$(arg enable_imu)" />
+  </include>
+
+  <!-- 4. Record VLP16 bagfile -->
   <include file="$(find velodyne_ros_tools)/launch/VLP16_record.launch">
     <arg name="frame_id" value="velodyne" />
     <arg name="project_dir" value="$(arg project_name)" />
-    <arg name="bag_file" value="lidar.bag" />
+    <arg name="bag_file" value="velodyne_lidar.bag" />
   </include>
 
   <!-- Record Wheel odometry and IMU -->
-  <node name="m4_proprioception_recorder" pkg="isr_m4_tools" type="record_proprioception.sh" output="screen"
+  <node name="isr_m4_recorder" pkg="isr_m4_tools" type="record_isr_robot.sh" output="screen"
     args="$(arg project_name)" />
 
 </launch>
