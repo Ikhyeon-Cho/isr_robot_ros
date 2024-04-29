@@ -1,17 +1,37 @@
 <launch>
   <arg name="project_name" default="" />
   <arg name="bag_file" default="isr_m4_dataset.bag" />
+
   <arg name="playback_speed" default="1" />
   <arg name="start_time" default="0.0" />
-  
 
   <!-- Camera: Raw Image republish && Publish pointcloud -->
-  <include file="$(find realsense_ros_tools)/launch/include/_rs_reproduce.launch">
-    <arg name="enable_pointcloud" value="true" />
+  <!-- 1. Zed2 at front -->
+  <include file="$(find zed2_ros_tools)/launch/include/compressed2raw.launch.xml">
+    <arg name="camera_ns" value="zed2" />
+  </include>
+  <include file="$(find zed2_ros_tools)/launch/include/depth2cloud_rgb.launch.xml">
+    <arg name="camera_ns" value="zed2" />
   </include>
 
-  <!-- LiDAR: vlp16 horizontal packet to pointcloud -->
-  <include file="$(find velodyne_ros_tools)/launch/include/_VLP16_packet2cloud.launch">
+  <!-- 2. RealSense at left -->
+  <include file="$(find realsense_ros_tools)/launch/include/compressed2raw.launch.xml">
+    <arg name="camera_ns" value="rs_camera_left" />
+  </include>
+  <include file="$(find realsense_ros_tools)/launch/include/depth2cloud_rgb.launch.xml">
+    <arg name="camera_ns" value="rs_camera_left" />
+  </include>
+
+  <!-- 3. RealSense at right -->
+  <include file="$(find realsense_ros_tools)/launch/include/compressed2raw.launch.xml">
+    <arg name="camera_ns" value="rs_camera_right" />
+  </include>
+  <include file="$(find realsense_ros_tools)/launch/include/depth2cloud_rgb.launch.xml">
+    <arg name="camera_ns" value="rs_camera_right" />
+  </include>
+
+  <!-- LiDAR: vlp16 packet to pointcloud -->
+  <include file="$(find velodyne_ros_tools)/launch/include/VLP16_packet2cloud.launch.xml">
     <arg name="frame_id" value="velodyne" />
     <arg name="target_frame" value="" />
     <arg name="min_range" value="0.4" />
@@ -19,7 +39,7 @@
   </include>
 
   <!-- Static Transforms -->
-  <include file="$(find isr_m4)/launch/include/sensors/_static_transforms.launch">
+  <include file="$(find isr_m4)/launch/include/static_transforms.launch.xml">
     <arg name="use_lidar" value="true" />
     <arg name="use_camera" value="true" />
     <arg name="use_imu" value="true" />
