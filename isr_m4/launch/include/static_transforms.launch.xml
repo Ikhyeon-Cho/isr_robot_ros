@@ -30,4 +30,38 @@
       args="0.3 0 0.355 0 0 0 base_link imu_link" />
   </group>
 
+  <group if="$(arg use_camera)">
+    <!-- Realsense D455 at left URDF -->
+    <node pkg="tf2_ros" type="static_transform_publisher" name="tf_rs_left_to_rs_color_optical"
+      args="0.000 -0.059 -0.000 -1.569 -0.002 -1.571 rs_camera_left_link rs_camera_left_color_optical_frame" />
+    <node pkg="tf2_ros" type="static_transform_publisher" name="tf_rs_left_to_rs_depth_optical"
+      args="0 0 0 -1.571 -0.000 -1.571 rs_camera_left_link rs_camera_left_depth_optical_frame" />
+
+    <!-- Realsense D455 at right URDF -->
+    <node pkg="tf2_ros" type="static_transform_publisher" name="tf_rs_right_to_rs_color_optical"
+      args="0.000, -0.059, -0.000 -1.569 -0.002 -1.571 rs_camera_right_link rs_camera_right_color_optical_frame" />
+    <node pkg="tf2_ros" type="static_transform_publisher" name="tf_rs_right_to_rs_depth_optical"
+      args="0 0 0 -1.571 -0.000 -1.571 rs_camera_right_link rs_camera_right_depth_optical_frame" />
+
+    <!-- Zed2 Camera URDF-->
+    <param name="zed2_description"
+      command="$(find xacro)/xacro '$(find zed_wrapper)/urdf/zed_descr.urdf.xacro'
+         camera_name:=zed2
+         camera_model:=zed2
+         base_frame:=base_link
+         cam_pos_x:=0.40
+         cam_pos_y:=0.0
+         cam_pos_z:=0.405
+         cam_roll:=0.0
+         cam_pitch:=0.3590
+         cam_yaw:=0.0"
+    />
+    <node name="zed2_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"
+      output="screen" required="true">
+      <remap from="robot_description" to="zed2_description" />
+    </node>
+
+  </group>
+
+
 </launch>
