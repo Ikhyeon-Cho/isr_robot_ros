@@ -137,21 +137,19 @@ roslaunch isr_m4_tools merge_data.launch project_name:={your-project-name}
 ```
 
 ### Visualize the recorded data
-Use the following command to visualize recorded rosbag:
+Use the following command to visualize recorded rosbag in Rviz:
 ```
-cd ~/Downloads/{your-project-name}
-roslaunch isr_m4_tools test_playback_data.launch project_name:=urban_navigation      # Rviz visualization
+roslaunch isr_m4_tools test_playback_data.launch project_name:={your-project-name}
 ```
-or, you can just use the following command for rosbag play.
+or, you can disable Rviz by the command:
 ```
-roslaunch isr_m4_tools playback_data.launch project_name:=urban_navigation
+roslaunch isr_m4_tools playback_data.launch project_name:={your-project-name}
 ```
-Possible launch arguments are:
 The followings are possible launch arguments:
 - **`project_name`** (string, default: "") (Empty string points `~/Downloads/`)<br>
     The default path is `~/Downloads/`. If you give an argument, then `~/Downloads/{argument} `
 
-- **`bag_file`** (string, default: isr_m4_dataset.bag)<br>
+- **`bag_file`** (string, default: "isr_m4_dataset.bag")<br>
     The name of the rosbag file to be played.
 
 - **`playback_speed`** (double, default: 1.0)<br>
@@ -159,3 +157,9 @@ The followings are possible launch arguments:
 
 - **`start_time`** (double, default: 1.0)<br>
     The start time of bagfile playback.
+
+### Visualize the robot model
+Use the following command to visualize robot model in Rviz:
+```
+roslaunch isr_m4_description robot_model.launch
+```
