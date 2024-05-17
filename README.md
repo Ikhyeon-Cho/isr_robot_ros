@@ -11,6 +11,17 @@ This repository provides `isr_m4` ROS driver package implemented for running ISR
 **Dependencies:** This software is built on the Robotic Operating System ([ROS](https://www.ros.org/)). We assume that the followings are installed.
 - Ubuntu (Tested on 20.04) 
 - ROS (Tested on [ROS Noetic](https://wiki.ros.org/noetic))
+- [zed2_ros_tools](https://github.com/Ikhyeon-Cho/zed2_ros_tools) (custom wrapper package for zed camera driver)
+- [realsense_ros_tools](https://github.com/Ikhyeon-Cho/realsense_ros_tools.git) (custom wrapper package for realsense camera driver)
+- [velodyne_ros_tools](https://github.com/Ikhyeon-Cho/velodyne_ros_tools.git) (custom wrapper package for velodyne lidar driver)
+
+Use the following commands for the installation of dependencies:
+```
+cd ~/{your-ros-workspace}/src
+git clone https://github.com/Ikhyeon-Cho/zed2_ros_tools
+git clone https://github.com/Ikhyeon-Cho/realsense_ros_tools.git
+git clone https://github.com/Ikhyeon-Cho/velodyne_ros_tools.git
+```
 
 **Build:** In order to install the `isr_m4` package, clone the latest version from this repository and compile the package.
 ```
