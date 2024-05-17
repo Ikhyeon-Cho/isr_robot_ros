@@ -11,6 +11,6 @@
     <arg name="start_time" value="$(arg start_time)" />
   </include>
 
-  <node name="rviz_isr_m4" pkg="rviz" type="rviz" args="-d $(find isr_m4_tools)/launch/rviz/isr_m4.rviz" />
+  <node name="rviz_isr_m4" pkg="rviz" type="rviz" args="-d $(find isr_m4_tools)/launch/rviz/isr_m4_tools.rviz" />
 
 </launch>
