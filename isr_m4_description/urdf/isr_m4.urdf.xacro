@@ -5,7 +5,7 @@
     <visual>
       <origin xyz="0 0 0.457" rpy="-1.57 0 -1.57" />
       <geometry>
-        <mesh filename="package://isr_m4_description/meshes/isr_m3.stl" scale="0.001 0.001 0.001" />
+        <mesh filename="file://$(find isr_m4_description)/meshes/isr_m3.stl" scale="0.001 0.001 0.001" />
       </geometry>
       <material name="light_black">
         <!-- Define the RGBA color for light black; RGBA values range from 0 to 1 -->
