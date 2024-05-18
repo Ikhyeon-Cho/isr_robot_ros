@@ -1,20 +1,38 @@
 # ISR-M3
+This repository provides `isr_m3` ROS driver package implemented for running ISR-M3, the indoor/outdoor mobile robot manufactured by Intelligent Systems and Robotics (ISR) Lab. 
 
-## Overview
+<p align='center'>
+    <img src="isr_m3_bringup/docs/isr_m3.jpg" alt="isr_m4" height="200"/>
+    <img src="isr_m3_bringup/docs/isr_m3_3d.png" alt="isr_m4" height="200"/>
+</p>
 
-The repository provides the `isr_m3` ROS driver package implemented for running ISR-M3, the robot manufactured by Intelligent Systems and Robotics (ISR) Lab. 
+ISR-M4 is designed for urban living environments and is capable of operating in diverse outdoor terrains. The robot is equipped with the following exteroceptive and proprioceptive sensors.
+- 3D LiDAR (Velodyne)
+- IMU
+- Wheel encoders
 
-## Getting Started
-### Build Package
-Use the following commands to download and compile the package.
+## Installation
+**Dependencies:** This software is built on the Robotic Operating System ([ROS](https://www.ros.org/)). We assume that the followings are installed.
+- Ubuntu (Tested on 20.04) 
+- ROS (Tested on [ROS Noetic](https://wiki.ros.org/noetic))
+- [xsens_mti_driver](https://github.com/nobleo/xsens_mti_driver) (for Xsens MTI-30)
+- [velodyne_ros_tools](https://github.com/Ikhyeon-Cho/velodyne_ros_tools.git) (for Velodyne LiDAR, custom wrapper package)
+
+Use the following commands for the installation of dependencies:
 ```
-cd ~/catkin_ws/src
-git clone https://github.com/Ikhyeon-Cho/isr_robot_ros.git
+cd ~/{your-ros-workspace}/src
+git clone https://github.com/nobleo/xsens_mti_driver                # IMU
+git clone https://github.com/Ikhyeon-Cho/velodyne_ros_tools.git     # Velodyne
+```
+**Build:** In order to install `isr_m3` ROS driver, clone the latest version from this repository and compile the package.
+```
+cd ~/{your-ros-workspace}/src
+git clone https://github.com/Ikhyeon-Cho/isr_robot_ros.git -b isr_m3/ros1   # clone branch [isr_m3/ros1]
 cd ..
 catkin build isr_m3_bringup  # or catkin_make
 ```
-
-### Run the ROS driver
+## How can I use this driver?
+### Run the robot
 To start running ISR-M3 robot, you should connect to the robot first. After, use the command below:
 
 ```
