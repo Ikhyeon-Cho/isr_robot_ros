@@ -9,9 +9,17 @@
   <buildtool_depend>catkin</buildtool_depend>
   <depend>roscpp</depend>
   <depend>rospy</depend>
+  
   <depend>isr_m4_base</depend>
   <depend>isr_m4_tools</depend>
+
+  <depend>xsens_mti_driver</depend>
+  <depend>zed2_ros_tools</depend>
+  <depend>realsense_ros_tools</depend>
+  <depend>velodyne_ros_tools</depend>
+
   <depend>keyboard</depend>
+  
   <export>
   </export>
 </package>
