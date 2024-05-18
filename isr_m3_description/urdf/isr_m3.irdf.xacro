@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<robot name="isr_m3" xmlns:xacro="http://ros.org/wiki/xacro">
+  <!-- Base Link -->
+  <link name="base_link">
+    <visual>
+      <origin xyz="0 0 0.457" rpy="-1.57 0 -1.57" />
+      <geometry>
+        <mesh filename="package://isr_m3_description/meshes/isr_m3.stl" scale="0.001 0.001 0.001" />
+      </geometry>
+      <material name="light_black">
+        <!-- Define the RGBA color for light black; RGBA values range from 0 to 1 -->
+        <color rgba="0.4 0.4 0.4 1.0" /> <!-- light black color -->
+      </material>
+    </visual>
+    <!-- Add inertial and collision as needed -->
+  </link>
+
+</robot>
