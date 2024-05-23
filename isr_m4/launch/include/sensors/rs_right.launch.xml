@@ -2,7 +2,7 @@
   <!-- Realsense D455 at right -->
   <include file="$(find realsense_ros_tools)/launch/rs_camera.launch">
     <arg name="camera_ns" value="rs_camera_right" />
-    <arg name="serial_no" value="248622301988" />
+    <arg name="serial_no" value="238222075125" />
   </include>
 
 </launch>

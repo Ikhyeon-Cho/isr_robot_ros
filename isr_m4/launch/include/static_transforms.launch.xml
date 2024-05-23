@@ -4,13 +4,13 @@
   <arg name="use_imu" default="true" />
 
   <group if="$(arg use_camera)">
-    <!-- Realsense D455 at left-->
+    <!-- Realsense D435i at left-->
     <node pkg="tf2_ros" type="static_transform_publisher" name="tf_base_to_rs_left"
-      args="0.08 0.244 0.295 1.5708 0.553 3.14159 base_link rs_camera_left_link" />
+      args="0.15 0.244 0.297 1.5708 0.423 3.14159 base_link rs_camera_left_link" />
 
-    <!-- Realsense D455 at right-->
+    <!-- Realsense D435i at right-->
     <node pkg="tf2_ros" type="static_transform_publisher" name="tf_base_to_rs_right"
-      args="-0.07 -0.244 0.295 -1.5708 0.553 3.14159 base_link rs_camera_right_link" />
+      args="-0.04 -0.224 0.295 -1.6008 0.383 3.16159 base_link rs_camera_right_link" />
 
     <!-- Zed2 at front -->
     <!-- Note: See sensors/zed2.launch file -->
@@ -30,14 +30,15 @@
       args="0.3 0 0.355 0 0 0 base_link imu_link" />
   </group>
 
+  <!-- Below is needed for rosbag play: recorded /static_tf seems unstable... -->
   <group if="$(arg use_camera)">
-    <!-- Realsense D455 at left URDF -->
+    <!-- Realsense D435i at left from URDF: Don't change this value -->
     <node pkg="tf2_ros" type="static_transform_publisher" name="tf_rs_left_to_rs_color_optical"
       args="0.000 -0.059 -0.000 -1.569 -0.002 -1.571 rs_camera_left_link rs_camera_left_color_optical_frame" />
     <node pkg="tf2_ros" type="static_transform_publisher" name="tf_rs_left_to_rs_depth_optical"
       args="0 0 0 -1.571 -0.000 -1.571 rs_camera_left_link rs_camera_left_depth_optical_frame" />
 
-    <!-- Realsense D455 at right URDF -->
+    <!-- Realsense D435i at right from URDF: Don't change this value -->
     <node pkg="tf2_ros" type="static_transform_publisher" name="tf_rs_right_to_rs_color_optical"
       args="0.000, -0.059, -0.000 -1.569 -0.002 -1.571 rs_camera_right_link rs_camera_right_color_optical_frame" />
     <node pkg="tf2_ros" type="static_transform_publisher" name="tf_rs_right_to_rs_depth_optical"
@@ -56,10 +57,6 @@
          cam_pitch:=0.3590
          cam_yaw:=0.0"
     />
-    <node name="zed2_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"
-      output="screen" required="true">
-      <remap from="robot_description" to="zed2_description" />
-    </node>
 
   </group>
 

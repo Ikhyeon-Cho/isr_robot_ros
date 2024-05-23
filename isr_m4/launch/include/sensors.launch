@@ -3,7 +3,7 @@
   <arg name="use_camera" default="true" />
   <arg name="use_imu" default="true" />
 
-  <!-- Realsense D455 Camera -->
+  <!-- Realsense D435i Cameras -->
   <include if="$(arg use_camera)" file="$(find isr_m4)/launch/include/sensors/rs_left.launch.xml" />
   <include if="$(arg use_camera)" file="$(find isr_m4)/launch/include/sensors/rs_right.launch.xml" />
 
