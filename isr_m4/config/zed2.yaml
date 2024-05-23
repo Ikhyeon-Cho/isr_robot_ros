@@ -1,0 +1,52 @@
+# config/zed2.yaml
+# Parameters for Stereolabs ZED2 camera
+point_cloud_freq:               15.0        # Note: This is Dynamic only param!! [0.1 ~ 60] Hz: (equal or less to `grab_frame_rate` value)
+depth_confidence:               50
+depth_texture_conf:             100
+
+general:
+    camera_model:               'zed2'
+    zed_id:                     0           # Useful when multiple cameras are connected. ID is ignored if an SVO path is specified
+    grab_resolution:            'HD1080'     # 'HD2K', 'HD1080', 'HD720', 'VGA', 'AUTO'
+    grab_frame_rate:      &fps  15          # Frequency of frame grabbing for internal SDK operations
+    base_frame:                 'base_link' # must be equal to the frame_id used in the URDF file
+    camera_flip:                'AUTO'      # camera flip mode: 'OFF', 'ON', 'AUTO'
+    pub_resolution:             'CUSTOM'    # The resolution used for output. 'NATIVE' to use the same `general.grab_resolution` - `CUSTOM` to apply the `general.pub_downscale_factor` downscale factory to reduce bandwidth in transmission
+    pub_downscale_factor:       2.0         # rescale factor used to rescale image before publishing when 'pub_resolution' is 'CUSTOM'
+                                            # (With resolution 'HD720') --> 1.0: [1280 x 720], 1.5: [853 x 480], 
+                                            #                               2.0: [640 x 360],  3.0: [426 x 240], 4.0: [320 x 180]
+    pub_frame_rate:             *fps        # frequency of publishing of video and depth data (see SDK API "InitParameters::grab_compute_capping_fps")
+    self_calib:                 true        # enable/disable self calibration at starting
+
+depth:
+    depth_mode:                 'NEURAL' # 'NONE', 'PERFORMANCE', 'QUALITY', 'ULTRA', 'NEURAL', `NEURAL_PLUS`
+    depth_stabilization:        1             # [0-100] - 0: Disabled
+    min_depth:                  0.4           # Min: 0.2, Max: 3.0 - Default 0.7 - Note: reducing this value wil require more computational power and GPU memory
+    max_depth:                  10.0          # Max: 40.0
+    openni_depth_mode:          false         # 'false': 32bit float meter units, 'true': 16bit uchar millimeter units
+    
+object_detection:
+    od_enabled:                         false                            # True to enable Object Detection [not available for ZED]
+    model:                              'MULTI_CLASS_BOX_ACCURATE'      # 'MULTI_CLASS_BOX_FAST', 'MULTI_CLASS_BOX_MEDIUM', 'MULTI_CLASS_BOX_ACCURATE', 'PERSON_HEAD_BOX_FAST', 'PERSON_HEAD_BOX_ACCURATE'
+    max_range:                          15.                             # Maximum detection range
+    allow_reduced_precision_inference:  true                            # Allow inference to run at a lower precision to improve runtime and memory usage
+    prediction_timeout:                 0.5                             #  During this time [sec], the object will have OK state even if it is not detected. Set this parameter to 0 to disable SDK predictions            
+    object_tracking_enabled:            true                            # Enable/disable the tracking of the detected objects
+    mc_people:                          true                            # Enable/disable the detection of persons for 'MULTI_CLASS_BOX_X' models
+    mc_vehicle:                         true                            # Enable/disable the detection of vehicles for 'MULTI_CLASS_BOX_X' models
+    mc_bag:                             false                            # Enable/disable the detection of bags for 'MULTI_CLASS_BOX_X' models
+    mc_animal:                          false                            # Enable/disable the detection of animals for 'MULTI_CLASS_BOX_X' models
+    mc_electronics:                     false                            # Enable/disable the detection of electronic devices for 'MULTI_CLASS_BOX_X' models
+    mc_fruit_vegetable:                 false                            # Enable/disable the detection of fruits and vegetables for 'MULTI_CLASS_BOX_X' models
+    mc_sport:                           false                            # Enable/disable the detection of sport-related objects for 'MULTI_CLASS_BOX_X' models
+
+pos_tracking:
+    pos_tracking_enabled:       false                            # True to enable positional tracking from start
+
+mapping:
+    mapping_enabled:            false                           # True to enable mapping and fused point cloud publication
+
+sensors:
+    sensors_timestamp_sync:     false                           # Synchronize Sensors messages timestamp with latest received frame
+    max_pub_rate:               200.                            # max frequency of publishing of sensors data. MAX: 400. - MIN: grab rate
+    publish_imu_tf:             false                            # publish `IMU -> <cam_name>_left_camera_frame` TF

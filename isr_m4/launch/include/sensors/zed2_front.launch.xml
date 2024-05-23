@@ -1,6 +1,11 @@
 <launch>
   <!-- Zed2 at front -->
   <include file="$(find zed2_ros_tools)/launch/zed2_camera.launch">
+    <arg name="camera_ns" value="camera_front" />
+    <arg name="enable_pointcloud" value="true" />
+    
+    <arg name="config_path" value="$(find isr_m4)/config/zed2.yaml" />
+
     <arg name="base_frame" value="base_link" />
     <arg name="cam_pos_x" value="0.40" />
     <arg name="cam_pos_y" value="0.0" />
