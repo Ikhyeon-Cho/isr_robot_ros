@@ -3,12 +3,21 @@
   <arg name="use_camera" default="true" />
   <arg name="use_imu" default="true" />
 
+  <arg name="enable_pointcloud" default="true" />
+
   <!-- Realsense D435i Cameras -->
-  <include if="$(arg use_camera)" file="$(find isr_m4)/launch/include/sensors/rs_left.launch.xml" />
-  <include if="$(arg use_camera)" file="$(find isr_m4)/launch/include/sensors/rs_right.launch.xml" />
+  <include if="$(arg use_camera)" file="$(find isr_m4)/launch/include/sensors/rs_left.launch.xml" >
+    <arg name="enable_pointcloud" value="$(arg enable_pointcloud)" />
+  </include>
+
+  <include if="$(arg use_camera)" file="$(find isr_m4)/launch/include/sensors/rs_right.launch.xml" >
+    <arg name="enable_pointcloud" value="$(arg enable_pointcloud)" />
+  </include>
 
   <!-- Zed2 Camera -->
-  <include if="$(arg use_camera)" file="$(find isr_m4)/launch/include/sensors/zed2_front.launch.xml" />
+  <include if="$(arg use_camera)" file="$(find isr_m4)/launch/include/sensors/zed2_front.launch.xml" >
+    <arg name="enable_pointcloud" value="$(arg enable_pointcloud)" />
+  </include>
 
   <!-- VLP-16 LiDAR -->
   <include if="$(arg use_lidar)" file="$(find isr_m4)/launch/include/sensors/velodyne.launch.xml" />

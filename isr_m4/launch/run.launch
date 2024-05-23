@@ -4,6 +4,7 @@
   <arg name="use_lidar" default="true" />
   <arg name="use_camera" default="true" />
   <arg name="publish_odom_tf" default="false" />
+  <arg name="enable_pointcloud" default="true" />
 
   <!-- Run ISR-M4 Base using keyboard or joystick -->
   <include file="$(find isr_m4)/launch/run_base.launch">
@@ -16,6 +17,7 @@
     <arg name="use_lidar" value="$(arg use_lidar)" />
     <arg name="use_camera" value="$(arg use_camera)" />
     <arg name="use_imu" value="$(arg use_imu)" />
+    <arg name="enable_pointcloud" value="$(arg enable_pointcloud)" />
   </include>
 
   <!-- Rviz -->
