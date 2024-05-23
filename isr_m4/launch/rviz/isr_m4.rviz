@@ -165,7 +165,7 @@ Visualization Manager:
       Value: true
     - Class: rviz/Image
       Enabled: true
-      Image Topic: /zed2_camera/rgb/image_rect_color
+      Image Topic: /camera_front/color/image
       Max Value: 1
       Median window: 5
       Min Value: 0
@@ -177,7 +177,7 @@ Visualization Manager:
       Value: true
     - Class: rviz/Image
       Enabled: true
-      Image Topic: /zed2_camera/depth/depth_registered
+      Image Topic: /camera_front/depth_aligned/image
       Max Value: 1
       Median window: 5
       Min Value: 0
@@ -196,31 +196,31 @@ Visualization Manager:
         All Enabled: false
         base_link:
           Value: true
+        camera_left_aligned_depth_to_color_frame:
+          Value: true
+        camera_left_color_frame:
+          Value: true
+        camera_left_color_optical_frame:
+          Value: true
+        camera_left_depth_frame:
+          Value: true
+        camera_left_depth_optical_frame:
+          Value: true
+        camera_left_link:
+          Value: true
+        camera_right_aligned_depth_to_color_frame:
+          Value: true
+        camera_right_color_frame:
+          Value: true
+        camera_right_color_optical_frame:
+          Value: true
+        camera_right_depth_frame:
+          Value: true
+        camera_right_depth_optical_frame:
+          Value: true
+        camera_right_link:
+          Value: true
         imu_link:
-          Value: true
-        rs_camera_left_aligned_depth_to_color_frame:
-          Value: false
-        rs_camera_left_color_frame:
-          Value: false
-        rs_camera_left_color_optical_frame:
-          Value: false
-        rs_camera_left_depth_frame:
-          Value: false
-        rs_camera_left_depth_optical_frame:
-          Value: false
-        rs_camera_left_link:
-          Value: true
-        rs_camera_right_aligned_depth_to_color_frame:
-          Value: false
-        rs_camera_right_color_frame:
-          Value: false
-        rs_camera_right_color_optical_frame:
-          Value: false
-        rs_camera_right_depth_frame:
-          Value: false
-        rs_camera_right_depth_optical_frame:
-          Value: false
-        rs_camera_right_link:
           Value: true
         velodyne:
           Value: true
@@ -252,26 +252,26 @@ Visualization Manager:
       Show Names: true
       Tree:
         base_link:
+          camera_left_link:
+            camera_left_aligned_depth_to_color_frame:
+              camera_left_color_optical_frame:
+                {}
+            camera_left_color_frame:
+              {}
+            camera_left_depth_frame:
+              camera_left_depth_optical_frame:
+                {}
+          camera_right_link:
+            camera_right_aligned_depth_to_color_frame:
+              camera_right_color_optical_frame:
+                {}
+            camera_right_color_frame:
+              {}
+            camera_right_depth_frame:
+              camera_right_depth_optical_frame:
+                {}
           imu_link:
             {}
-          rs_camera_left_link:
-            rs_camera_left_aligned_depth_to_color_frame:
-              rs_camera_left_color_optical_frame:
-                {}
-            rs_camera_left_color_frame:
-              {}
-            rs_camera_left_depth_frame:
-              rs_camera_left_depth_optical_frame:
-                {}
-          rs_camera_right_link:
-            rs_camera_right_aligned_depth_to_color_frame:
-              rs_camera_right_color_optical_frame:
-                {}
-            rs_camera_right_color_frame:
-              {}
-            rs_camera_right_depth_frame:
-              rs_camera_right_depth_optical_frame:
-                {}
           velodyne:
             {}
           zed2_base_link:
