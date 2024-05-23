@@ -3,7 +3,7 @@
   <arg name="use_camera" default="true" />
   <arg name="use_imu" default="true" />
 
-  <include file="$(find isr_m4)/launch/include/_sensors.launch">
+  <include file="$(find isr_m4)/launch/include/sensors.launch">
     <arg name="use_lidar" value="$(arg use_lidar)" />
     <arg name="use_camera" value="$(arg use_camera)" />
     <arg name="use_imu" value="$(arg use_imu)" />
