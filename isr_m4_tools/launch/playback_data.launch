@@ -8,10 +8,10 @@
   <!-- Camera: Raw Image republish && Publish pointcloud -->
   <!-- 1. Zed2 at front -->
   <include file="$(find zed2_ros_tools)/launch/include/compressed2raw.launch.xml">
-    <arg name="camera_ns" value="zed2" />
+    <arg name="camera_ns" value="camera_front" />
   </include>
   <include file="$(find zed2_ros_tools)/launch/include/depth2cloud_rgb.launch.xml">
-    <arg name="camera_ns" value="zed2" />
+    <arg name="camera_ns" value="camera_front" />
   </include>
 
   <!-- 2. RealSense at left -->
