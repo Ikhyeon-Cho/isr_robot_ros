@@ -12,17 +12,17 @@
 
   <!-- 2. Camera at left -->
   <include file="$(find realsense_ros_tools)/launch/rs_record.launch">
-    <arg name="camera_ns" value="rs_camera_left" />
+    <arg name="camera_ns" value="camera_left" />
     <arg name="project_dir" value="$(arg project_name)" />
-    <arg name="bagfile_name" value="rs_camera_left.bag" />
+    <arg name="bagfile_name" value="camera_left.bag" />
     <arg name="enable_imu" value="$(arg enable_imu)" />
   </include>
 
   <!-- 3. Camera at right -->
   <include file="$(find realsense_ros_tools)/launch/rs_record.launch">
-    <arg name="camera_ns" value="rs_camera_right" />
+    <arg name="camera_ns" value="camera_right" />
     <arg name="project_dir" value="$(arg project_name)" />
-    <arg name="bagfile_name" value="rs_camera_right.bag" />
+    <arg name="bagfile_name" value="camera_right.bag" />
     <arg name="enable_imu" value="$(arg enable_imu)" />
   </include>
 

@@ -16,18 +16,18 @@
 
   <!-- 2. RealSense at left -->
   <include file="$(find realsense_ros_tools)/launch/include/compressed2raw.launch.xml">
-    <arg name="camera_ns" value="rs_camera_left" />
+    <arg name="camera_ns" value="camera_left" />
   </include>
   <include file="$(find realsense_ros_tools)/launch/include/depth2cloud_rgb.launch.xml">
-    <arg name="camera_ns" value="rs_camera_left" />
+    <arg name="camera_ns" value="camera_left" />
   </include>
 
   <!-- 3. RealSense at right -->
   <include file="$(find realsense_ros_tools)/launch/include/compressed2raw.launch.xml">
-    <arg name="camera_ns" value="rs_camera_right" />
+    <arg name="camera_ns" value="camera_right" />
   </include>
   <include file="$(find realsense_ros_tools)/launch/include/depth2cloud_rgb.launch.xml">
-    <arg name="camera_ns" value="rs_camera_right" />
+    <arg name="camera_ns" value="camera_right" />
   </include>
 
   <!-- LiDAR: vlp16 packet to pointcloud -->

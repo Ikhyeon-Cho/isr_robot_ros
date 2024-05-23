@@ -1,8 +1,16 @@
 <launch>
-  <!-- Realsense D455 at right -->
+  <!-- Realsense D435i at right -->
   <include file="$(find realsense_ros_tools)/launch/rs_camera.launch">
-    <arg name="camera_ns" value="rs_camera_right" />
+    <arg name="camera_ns" value="camera_right" />
     <arg name="serial_no" value="238222075125" />
+    <arg name="enable_pointcloud" value="true" />
+    <arg name="enable_imu" default="false" />
+    
+    <arg name="fps" default="15" />
+    <arg name="color_width" default="640" />
+    <arg name="color_height" default="480" />
+    <arg name="depth_width" default="640" />
+    <arg name="depth_height" default="480" />
   </include>
 
 </launch>
