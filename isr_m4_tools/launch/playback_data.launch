@@ -40,6 +40,8 @@
 
   <!-- Static Transforms -->
   <include file="$(find isr_m4)/launch/include/static_transforms.launch.xml">
+    <arg name="playback_mode" value="true" />
+
     <arg name="use_lidar" value="true" />
     <arg name="use_camera" value="true" />
     <arg name="use_imu" value="true" />

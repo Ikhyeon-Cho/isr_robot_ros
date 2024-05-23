@@ -2,6 +2,7 @@
   <arg name="use_lidar" default="true" />
   <arg name="use_camera" default="true" />
   <arg name="use_imu" default="true" />
+  <arg name="playback_mode" default="false" />
 
   <group if="$(arg use_camera)">
     <!-- Realsense D435i at left-->
@@ -15,7 +16,7 @@
     <!-- Zed2 at front -->
     <!-- Note: See sensors/zed2.launch file -->
     <node pkg="tf2_ros" type="static_transform_publisher" name="tf_base_to_zed2_front"
-      args="0.40 0 0.405 0 0.3590 0 base_link zed2_base_link" />
+      args="0.39 0 0.405 0 0.3590 0 base_link zed2_base_link" />
   </group>
 
   <!-- Velodyne VLP-16 -->
@@ -31,22 +32,23 @@
   </group>
 
   <!-- Below is needed for rosbag play: recorded /static_tf seems unstable... -->
-  <group if="$(arg use_camera)">
-    <!-- Realsense D435i at left from URDF: Don't change this value -->
-    <node pkg="tf2_ros" type="static_transform_publisher" name="tf_rs_left_to_rs_color_optical"
-      args="0.000 -0.059 -0.000 -1.569 -0.002 -1.571 camera_left_link camera_left_color_optical_frame" />
-    <node pkg="tf2_ros" type="static_transform_publisher" name="tf_rs_left_to_rs_depth_optical"
-      args="0 0 0 -1.571 -0.000 -1.571 camera_left_link camera_left_depth_optical_frame" />
+  <group if="$(arg playback_mode)">
+    <group if="$(arg use_camera)">
+      <!-- Realsense D435i at left from URDF: Don't change this value -->
+      <node pkg="tf2_ros" type="static_transform_publisher" name="tf_rs_left_to_rs_color_optical"
+        args="0.000 -0.059 -0.000 -1.569 -0.002 -1.571 camera_left_link camera_left_color_optical_frame" />
+      <node pkg="tf2_ros" type="static_transform_publisher" name="tf_rs_left_to_rs_depth_optical"
+        args="0 0 0 -1.571 -0.000 -1.571 camera_left_link camera_left_depth_optical_frame" />
 
-    <!-- Realsense D435i at right from URDF: Don't change this value -->
-    <node pkg="tf2_ros" type="static_transform_publisher" name="tf_rs_right_to_rs_color_optical"
-      args="0.000, -0.059, -0.000 -1.569 -0.002 -1.571 camera_right_link camera_right_color_optical_frame" />
-    <node pkg="tf2_ros" type="static_transform_publisher" name="tf_rs_right_to_rs_depth_optical"
-      args="0 0 0 -1.571 -0.000 -1.571 camera_right_link camera_right_depth_optical_frame" />
+      <!-- Realsense D435i at right from URDF: Don't change this value -->
+      <node pkg="tf2_ros" type="static_transform_publisher" name="tf_rs_right_to_rs_color_optical"
+        args="0.000, -0.059, -0.000 -1.569 -0.002 -1.571 camera_right_link camera_right_color_optical_frame" />
+      <node pkg="tf2_ros" type="static_transform_publisher" name="tf_rs_right_to_rs_depth_optical"
+        args="0 0 0 -1.571 -0.000 -1.571 camera_right_link camera_right_depth_optical_frame" />
 
-    <!-- Zed2 Camera URDF-->
-    <param name="zed2_description"
-      command="$(find xacro)/xacro '$(find zed_wrapper)/urdf/zed_descr.urdf.xacro'
+      <!-- Zed2 Camera URDF-->
+      <param name="camera_front_description"
+        command="$(find xacro)/xacro '$(find zed_wrapper)/urdf/zed_descr.urdf.xacro'
          camera_name:=zed2
          camera_model:=zed2
          base_frame:=base_link
@@ -56,8 +58,13 @@
          cam_roll:=0.0
          cam_pitch:=0.3590
          cam_yaw:=0.0"
-    />
+      />
 
+      <node name="camera_front_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" output="screen" required="true">
+        <remap from="robot_description" to="camera_front_description" />
+      </node>
+
+    </group>
   </group>
 
 
