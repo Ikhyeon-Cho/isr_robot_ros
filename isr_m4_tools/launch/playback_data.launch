@@ -5,6 +5,8 @@
   <arg name="playback_speed" default="1" />
   <arg name="start_time" default="0.0" />
 
+  <arg name="save_tf" default="false" />
+
   <!-- Camera: Raw Image republish && Publish pointcloud -->
   <!-- 1. Zed2 at front -->
   <include file="$(find zed2_ros_tools)/launch/include/compressed2raw.launch.xml">
@@ -51,5 +53,10 @@
   <param name="/use_sim_time" value="true" />
   <node name="isr_m4_bag_player" pkg="rosbag" type="play" output="screen"
     args="--clock -r $(arg playback_speed) -s $(arg start_time) $(env HOME)/Downloads/$(arg project_name)/$(arg bag_file)" />
+
+  <!-- Save 3D pose estimation TF -->
+  <include if="$(arg save_tf)" file="$(find isr_m4_tools)/launch/include/save_robot_tf.launch.xml">
+    <arg name="project_dir" value="$(arg project_name)" />
+  </include>
 
 </launch>

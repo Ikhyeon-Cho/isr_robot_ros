@@ -1,5 +1,4 @@
 <launch>
   <arg name="project_dir" default="" />
-
   <node name="save_robot_tf" pkg="isr_m4_tools" type="save_robot_tf.sh" output="screen" args="$(arg project_dir)" />
 </launch>
