@@ -1,0 +1,43 @@
+<launch>
+  <arg name="use_lidar" default="true" />
+  <arg name="use_imu" default="true" />
+  <arg name="use_camera" default="true" />
+
+  <arg name="enable_pointcloud" default="false" />
+
+  <!-- Front: Zed2 Camera -->
+  <!-- Left:  Realsense D435i Camera -->
+  <!-- Right: Realsense D435i Camera -->
+  <group if="$(arg use_camera)">
+    <include file="$(find isr_m4)/launch/include/sensors/rs_left.launch.xml">
+      <arg name="enable_pointcloud" value="$(arg enable_pointcloud)" />
+    </include>
+
+    <include file="$(find isr_m4)/launch/include/sensors/rs_right.launch.xml">
+      <arg name="enable_pointcloud" value="$(arg enable_pointcloud)" />
+    </include>
+
+    <include file="$(find isr_m4)/launch/include/sensors/zed2_front.launch.xml">
+      <arg name="enable_pointcloud" value="$(arg enable_pointcloud)" />
+    </include>
+  </group>
+
+  <!-- VLP-16 LiDAR -->
+  <group if="$(arg use_lidar)">
+    <include file="$(find isr_m4)/launch/include/sensors/velodyne.launch.xml" />
+  </group>
+
+  <!-- Xsens mti-30 IMU -->
+  <include if="$(arg use_imu)" file="$(find isr_m4)/launch/include/sensors/xsens.launch.xml" />
+
+  <!-- Static Transform -->
+  <include file="$(find isr_m4)/launch/static_transforms.launch.xml">
+    <arg name="use_lidar" value="$(arg use_lidar)" />
+    <arg name="use_camera" value="$(arg use_camera)" />
+    <arg name="use_imu" value="$(arg use_imu)" />
+  </include>
+
+  <!-- RViz -->
+  <node name="rviz_isr_m4" pkg="rviz" type="rviz" args="-d $(find isr_m4)/launch/rviz/isr_m4.rviz" />
+
+</launch>

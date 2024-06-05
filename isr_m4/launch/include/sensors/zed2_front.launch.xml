@@ -9,11 +9,11 @@
     <arg name="config_path" value="$(find isr_m4)/config/zed2.yaml" />
 
     <arg name="base_frame" value="base_link" />
-    <arg name="cam_pos_x" value="0.40" />
+    <arg name="cam_pos_x" value="0.0" />
     <arg name="cam_pos_y" value="0.0" />
-    <arg name="cam_pos_z" value="0.405" />
+    <arg name="cam_pos_z" value="0.0" />
     <arg name="cam_roll" value="0.0" />
-    <arg name="cam_pitch" value="0.3590" />
+    <arg name="cam_pitch" value="0.0" />
     <arg name="cam_yaw" value="0.0" />
   </include>
 

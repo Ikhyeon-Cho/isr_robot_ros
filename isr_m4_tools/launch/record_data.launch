@@ -6,7 +6,7 @@
   <include file="$(find zed2_ros_tools)/launch/zed2_record.launch">
     <arg name="camera_ns" value="camera_front" />
     <arg name="project_dir" value="$(arg project_name)" />
-    <arg name="bag_file" value="zed2_camera.bag" />
+    <arg name="bag_file" value="camera_front.bag" />
     <arg name="enable_imu" value="$(arg enable_imu)" />
   </include>
 
@@ -14,7 +14,7 @@
   <include file="$(find realsense_ros_tools)/launch/rs_record.launch">
     <arg name="camera_ns" value="camera_left" />
     <arg name="project_dir" value="$(arg project_name)" />
-    <arg name="bagfile_name" value="rs_left.bag" />
+    <arg name="bagfile_name" value="camera_left.bag" />
     <arg name="enable_imu" value="$(arg enable_imu)" />
   </include>
 
@@ -22,7 +22,7 @@
   <include file="$(find realsense_ros_tools)/launch/rs_record.launch">
     <arg name="camera_ns" value="camera_right" />
     <arg name="project_dir" value="$(arg project_name)" />
-    <arg name="bagfile_name" value="rs_right.bag" />
+    <arg name="bagfile_name" value="camera_right.bag" />
     <arg name="enable_imu" value="$(arg enable_imu)" />
   </include>
 

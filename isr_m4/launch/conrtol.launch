@@ -1,10 +1,10 @@
 <launch>
-  <arg name="use_joy" default="false" />
-  <arg name="publish_odom_tf" default="true" />
+  <arg name="use_joy" default="true" />
+  <arg name="tf_odom" default="true" />
 
   <!-- Run ISR-M4 Base -->
   <include file="$(find isr_m4)/launch/include/robot/m4_driver.launch.xml">
-    <arg name="publish_tf" value="$(arg publish_odom_tf)" />
+    <arg name="publish_tf" value="$(arg tf_odom)" />
   </include>
 
   <!-- Controller: Keyboard or Joystick -->
